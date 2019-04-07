@@ -1,5 +1,6 @@
 com/clou/photoshare/model/Photo.class
 com/clou/photoshare/PhotoshareApplication.class
+com/clou/photoshare/service/UserService.class
 com/clou/photoshare/model/Trip.class
 com/clou/photoshare/model/User.class
 com/clou/photoshare/controller/GreetingController.class
