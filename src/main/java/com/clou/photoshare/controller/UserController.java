@@ -25,14 +25,16 @@ public class UserController {
         Iterable<User> users = repository.findAll();
 
         for (User user: users) {
+            // potential bug
             return res += user.toString() + "<br>";
         }
 
         return res;
     }
 
-    @RequestMapping("/findbyid")
-    public String findById(String id) {
-        return repository.findOne(id).toString();
-    }
+//    @RequestMapping("/findByID")
+//    public String findById(String id) {
+//        Potential bug
+//        return repository.findById(id);
+//    }
 }
