@@ -8,3 +8,14 @@ addons:
       - oracle-java8-installer
 before_install:
   - chmod +x mvnw
+
+deploy:
+  provider: elasticbeanstalk
+  access_key_id:
+    secure: "AKIA5PFOELVFIIQGRS77"
+  secret_access_key:
+    secure: "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"
+  region: "us-east-1"
+  app: "photoshare"
+  env: "Photoshare-env"
+  bucket_name: "elasticbeanstalk-us-east-1-925930642762"
