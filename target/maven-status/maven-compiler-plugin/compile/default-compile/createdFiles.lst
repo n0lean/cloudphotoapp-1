@@ -1,3 +1,6 @@
+com/clou/photoshare/controller/UserController.class
+com/clou/photoshare/model/UserRepository.class
+com/clou/photoshare/config/DynamoDBConfig.class
 com/clou/photoshare/model/Photo.class
 com/clou/photoshare/PhotoshareApplication.class
 com/clou/photoshare/service/UserService.class
