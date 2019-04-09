@@ -1,3 +1,3 @@
-# CloudPhoto ![Travis](https://travis-ci.org/dennisan96/cloudphotoapp.svg?branch=master)
+# CloudPhoto ![Travis](https://travis-ci.com/Dennisan96/cloudphotoapp.svg?token=oqwGsea6rix3rBswsd6W&branch=master)
 
 Backend repo for CloudPhoto project.
