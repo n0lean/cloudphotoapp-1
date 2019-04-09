@@ -8,3 +8,25 @@ addons:
       - oracle-java8-installer
 before_install:
   - chmod +x mvnw
+branches:
+  only:
+  - master
+
+
+before_deploy:
+  - mvn package && zip -r ./my_source_bundle.zip target/photoshare-0.0.1-SNAPSHOT.jar
+
+deploy:
+  skip_cleanup: true
+  provider: elasticbeanstalk
+  access_key_id:
+    secure: "$ACCESSKEYID"
+  secret_access_key:
+    secure: "$SECRETACCESSKEY"
+  region: "us-east-1"
+  app: "photoshare"
+  env: "Photoshare-env"
+  bucket_name: "elasticbeanstalk-us-east-1-925930642762"
+  on:
+    branch: master
+  zip_file: "my_source_bundle.zip"

@@ -10,6 +10,7 @@ import org.springframework.data.repository.CrudRepository;
 @EnableScan
 public interface UserRepository extends CrudRepository<User, String>{
     List<User> findByLastName(String lastName);
-    List<User> findById(String id);
+//    Potential bug
+//    List<User> findById(String id);
     List<User> findByFirstName(String firstName);
 }
