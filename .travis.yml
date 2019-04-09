@@ -28,5 +28,5 @@ deploy:
   env: "Photoshare-env"
   bucket_name: "elasticbeanstalk-us-east-1-925930642762"
   on:
-    branch: master
+    branch: deploy
   zip_file: "my_source_bundle.zip"
