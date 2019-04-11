@@ -25,7 +25,7 @@ public class UserController {
 
 
     @RequestMapping("/save")
-    public String save(@RequestParam("name") String name) {
+    public String save() {
         repository.save(
                 new UserBuilder()
                         .id("id")

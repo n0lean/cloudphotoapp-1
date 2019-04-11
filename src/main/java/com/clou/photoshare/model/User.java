@@ -32,7 +32,7 @@ public class User {
         this.email = email;
     }
 
-    @DynamoDBHashKey(attributeName = "id")
+    @DynamoDBHashKey(attributeName = "Id")
     public String getId() {
         return id;
     }
@@ -41,12 +41,12 @@ public class User {
         this.id = id;
     }
 
-    @DynamoDBHashKey(attributeName = "nickName")
+    @DynamoDBAttribute(attributeName = "NickName")
     public String getNickName() { return nickName; }
 
     public void setNickName(String nickName) { this.nickName = nickName; }
 
-    @DynamoDBHashKey(attributeName = "email")
+    @DynamoDBAttribute(attributeName = "Email")
     public String getEmail() { return email; }
 
     public void setEmail(String email) { this.email = email; }
@@ -71,8 +71,8 @@ public class User {
 
     @Override
     public String toString() {
-        return String.format("User: id:%s, nickname: %s, firstname: %s, lastname: %s",
-                this.id, this.nickName, this.firstName, this.lastName);
+        return String.format("User: id:%s, firstname: %s, lastname: %s",
+                this.id, this.firstName, this.lastName);
     }
 
 
