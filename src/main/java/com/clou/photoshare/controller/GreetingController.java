@@ -1,20 +1,22 @@
 package com.clou.photoshare.controller;
 
+import java.text.MessageFormat;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.annotations.ApiIgnore;
 
 
 @RestController
 public class GreetingController {
-    private static final String template = "Hellos, %s!";
-    private final AtomicLong counter = new AtomicLong();
+    private static final String template = "Hellos, {0}!";
 
-    @RequestMapping(value = "", method = RequestMethod.GET)
+    @ApiIgnore
+    @RequestMapping(value = "/hello", method = RequestMethod.GET)
     public String greeting(@RequestParam(value = "name", defaultValue = "World") String name) {
-        return "Welcome";
+        return MessageFormat.format(template, name);
     }
 }

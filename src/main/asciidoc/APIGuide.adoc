@@ -1,0 +1,19 @@
+# API
+
+- AUTH
+  - Login
+  - Signup
+- USER
+  - Trip
+    - CREATE, LIST, DELETE, UPDATE (trip info update)
+    - PHOTO
+    - MEMBER
+  - Friends
+    - CREATE, LIST, DELETE, UPDATE*
+  - Photo
+    - CREATE, LIST, DELETE, UPDATE*
+- SEARCH
+
+# ML
+
+- Distribution

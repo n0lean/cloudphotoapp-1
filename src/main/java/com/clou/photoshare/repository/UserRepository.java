@@ -1,16 +1,18 @@
-package com.clou.photoshare.model;
+package com.clou.photoshare.repository;
 
 
 import java.util.List;
 
+import com.clou.photoshare.model.User;
 import org.socialsignin.spring.data.dynamodb.repository.EnableScan;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
 
-@EnableScan
+@Repository
 public interface UserRepository extends CrudRepository<User, String>{
+    @EnableScan
     List<User> findByLastName(String lastName);
-//    Potential bug
-//    List<User> findById(String id);
+    @EnableScan
     List<User> findByFirstName(String firstName);
 }

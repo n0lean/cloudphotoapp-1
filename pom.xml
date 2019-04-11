@@ -81,9 +81,31 @@
             <artifactId>spring-data-dynamodb</artifactId>
             <version>5.1.0</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>DynamoDBLocal</artifactId>
+            <version>[1.11,2.0)</version>
+            <scope>test</scope>
+        </dependency>
         <!--End AWS related-->
 
+        <!--Swagger related-->
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>2.9.2</version>
+        </dependency>
+        <!--End Swagger related-->
     </dependencies>
+
+    <repositories>
+        <repository>
+            <id>dynamodb-local-oregon</id>
+            <name>DynamoDB Local Release Repository</name>
+            <url>https://s3-us-west-2.amazonaws.com/dynamodb-local/release</url>
+        </repository>
+    </repositories>
 
     <dependencyManagement>
         <dependencies>

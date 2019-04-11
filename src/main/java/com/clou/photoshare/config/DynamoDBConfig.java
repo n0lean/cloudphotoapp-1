@@ -13,7 +13,7 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 import com.amazonaws.util.StringUtils;
 
 @Configuration
-@EnableDynamoDBRepositories(basePackages = "com.javasampleapproach.dynamodb.repo")
+@EnableDynamoDBRepositories(basePackages = "com.clou.photoshare.repository")
 public class DynamoDBConfig {
 
     @Value("${amazon.dynamodb.endpoint}")
