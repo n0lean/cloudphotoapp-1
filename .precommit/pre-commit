@@ -1,3 +1,6 @@
+#! /usr/bin/env python
+# -*- encoding: utf-8 -*-
+
 import sys
 import os
 import re
@@ -17,20 +20,10 @@ def get_file_name(content, postfix=None):
 
 if __name__ == '__main__':
     print('---------------Pre-commit tests---------------')
-    #check code command
-    command = 'java -jar ' + jarpath[:-1] + ' -c ' + checkfilepath[:-1]
+    result = os.popen('mvn test').read()
 
-    #the file to check
-    files = os.popen('mvn test').read()
-
-    #the result of command
-    content = get_file_name(files, 'java')
-
-    error_num = 0
-    warning_num = 0
-    for i in content:
-        error_num += get_level(result,'ERROR')
-        warning_num += get_level(result,'WARN')
+    error_num = get_level(result,'ERROR')
+    warning_num = get_level(result,'WARN')
 
     print('There is {} warning in your code.'.format(warning_num))
 
