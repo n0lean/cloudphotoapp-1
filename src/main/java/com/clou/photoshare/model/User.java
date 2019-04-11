@@ -3,19 +3,30 @@ package com.clou.photoshare.model;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Email;
 
 @DynamoDBTable(tableName = "User")
 public class User {
-
+    @NotNull
     private String id;
+
+    @NotNull
+    private String nickName;
+
     private String firstName;
     private String lastName;
+
+    @NotNull
+    @Email
     private String email;
 
-    public User(String id, String firstName, String lastName, String email) {
+    public User(String id, String nickName, String firstName, String lastName, String email) {
         this.id = id;
+        this.nickName = nickName;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -29,6 +40,16 @@ public class User {
     public void setId(String id) {
         this.id = id;
     }
+
+    @DynamoDBHashKey(attributeName = "nickName")
+    public String getNickName() { return nickName; }
+
+    public void setNickName(String nickName) { this.nickName = nickName; }
+
+    @DynamoDBHashKey(attributeName = "email")
+    public String getEmail() { return email; }
+
+    public void setEmail(String email) { this.email = email; }
 
     @DynamoDBAttribute(attributeName = "LastName")
     public String getLastName() {
@@ -50,7 +71,11 @@ public class User {
 
     @Override
     public String toString() {
-        return String.format("User: id:%s, firstname: %s, lastname:%s", this.id, this.firstName, this.lastName);
+        return String.format("User: id:%s, nickname: %s, firstname: %s, lastname: %s",
+                this.id, this.nickName, this.firstName, this.lastName);
     }
 
+
 }
+
+

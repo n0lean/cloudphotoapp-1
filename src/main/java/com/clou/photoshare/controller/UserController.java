@@ -1,16 +1,21 @@
 package com.clou.photoshare.controller;
 
-import com.clou.photoshare.repository.UserRepository;
+import com.clou.photoshare.model.UserBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.clou.photoshare.model.User;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.clou.photoshare.repository.UserRepository;
+
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/users")
 public class UserController {
 
+    final
     UserRepository repository;
 
     @Autowired
@@ -19,11 +24,15 @@ public class UserController {
     }
 
 
-
     @RequestMapping("/save")
-    public String save() {
-        System.out.println("In!");
-        repository.save(new User("id", "firstanme", "lastname", "123@gmail.com"));
+    public String save(@RequestParam("name") String name) {
+        repository.save(
+                new UserBuilder()
+                        .id("id")
+                        .nickName("nickname")
+                        .email("123@abc.com")
+                        .buildUser()
+        );
         return "Done";
     }
 
