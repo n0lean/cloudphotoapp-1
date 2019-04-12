@@ -77,5 +77,20 @@ public class User {
                 this.id, this.nickName, this.firstName, this.lastName, this.email);
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
 
+        if(obj == null || obj.getClass()!= this.getClass())
+            return false;
+
+        User user = (User) obj;
+        return (
+                user.getId().equals(this.getId())
+                        && user.getEmail().equals(this.getEmail())
+                        && user.getFirstName().equals(this.getFirstName())
+                        && user.getLastName().equals(this.getLastName())
+                        && user.getNickName().equals(this.getNickName())
+        );
+    }
 }
