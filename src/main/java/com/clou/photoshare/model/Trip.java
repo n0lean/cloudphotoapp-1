@@ -62,7 +62,7 @@ public class Trip {
         this.tripMember.addAll(memberId);
     }
 
-    public void deleteTripMember(String memberId) {
+    public void deleteTripMember    (String memberId) {
         if (this.tripMember.contains(memberId)) {
             this.tripMember.remove(memberId);
         }
