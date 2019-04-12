@@ -43,7 +43,11 @@ public class TripTest {
 
     @Test
     public void deleteMember() {
-
+        Trip trip = new TripBuilder()
+                .id("123")
+                .addMember("abc")
+                .buildTrip();
+        trip.deleteTripMember("abc");
     }
 
 }
