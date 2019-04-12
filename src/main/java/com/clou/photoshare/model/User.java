@@ -4,7 +4,6 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Email;
@@ -44,17 +43,17 @@ public class User {
         this.id = id;
     }
 
-    @DynamoDBAttribute(attributeName = "NickName")
+//    @DynamoDBAttribute(attributeName = "NickName")
     public String getNickName() { return nickName; }
 
     public void setNickName(String nickName) { this.nickName = nickName; }
 
-    @DynamoDBAttribute(attributeName = "Email")
+//    @DynamoDBAttribute(attributeName = "Email")
     public String getEmail() { return email; }
 
     public void setEmail(String email) { this.email = email; }
 
-    @DynamoDBAttribute(attributeName = "LastName")
+//    @DynamoDBAttribute(attributeName = "LastName")
     public String getLastName() {
         return lastName;
     }
@@ -63,7 +62,7 @@ public class User {
         this.lastName = lastName;
     }
 
-    @DynamoDBAttribute(attributeName = "FirstName")
+//    @DynamoDBAttribute(attributeName = "FirstName")
     public String getFirstName() {
         return firstName;
     }
@@ -74,11 +73,9 @@ public class User {
 
     @Override
     public String toString() {
-        return String.format("User: id:%s, firstname: %s, lastname: %s",
-                this.id, this.firstName, this.lastName);
+        return String.format("User: id:%s, nickname: %s, firstname: %s, lastname: %s, email: %s",
+                this.id, this.nickName, this.firstName, this.lastName, this.email);
     }
 
 
 }
-
-
