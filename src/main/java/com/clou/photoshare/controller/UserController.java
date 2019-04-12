@@ -15,8 +15,7 @@ import com.clou.photoshare.repository.UserRepository;
 @RequestMapping("/users")
 public class UserController {
 
-    final
-    UserRepository repository;
+    final UserRepository repository;
 
     @Autowired
     public UserController(UserRepository repo) {

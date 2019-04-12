@@ -10,9 +10,10 @@ import org.springframework.stereotype.Repository;
 
 
 @Repository
+@EnableScan
 public interface UserRepository extends CrudRepository<User, String> {
-    @EnableScan
-    List<User> findByLastName(String lastName);
-    @EnableScan
-    List<User> findByFirstName(String firstName);
+//    @EnableScan
+//    List<User> findByLastName(String lastName);
+//    @EnableScan
+//    List<User> findByFirstName(String firstName);
 }
