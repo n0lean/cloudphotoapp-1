@@ -24,7 +24,7 @@ public class User {
     private String email;
 
     // have a empty consturctor so we can constrcut object from DB
-    public User () {};
+    public User () {}
 
     public User(String id, String nickName, String firstName, String lastName, String email) {
         this.id = id;
