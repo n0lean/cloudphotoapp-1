@@ -3,11 +3,9 @@ package com.clou.photoshare.controller;
 import com.clou.photoshare.model.UserBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import com.clou.photoshare.model.User;
-import org.springframework.web.bind.annotation.RestController;
 
 import com.clou.photoshare.repository.UserRepository;
 
@@ -24,8 +22,25 @@ public class UserController {
     }
 
 
-    @RequestMapping("/save")
-    public String save() {
+    @RequestMapping(value = "/save", method = RequestMethod.POST) // didn't use @ModelAttribute, decide later after know Congito
+    public String addUser(@RequestBody User user) {
+        repository.save(user);
+        return "success";
+    }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    public User getUser(@PathVariable String id) {
+        return repository.findById(id).get(); // naive approach, return's a User JSON
+    }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.POST)
+    public String updateUser(@RequestBody User user) {
+        repository.save(user);
+        return "success";
+    }
+
+    @RequestMapping("/testsave")
+    public String testsave() {
         repository.save(
                 new UserBuilder()
                         .id("id")
