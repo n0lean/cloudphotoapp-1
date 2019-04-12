@@ -1,13 +1,12 @@
 package com.clou.photoshare.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 
 public class TripBuilder {
     private String _id;
     private String _tripName = "Untitled Trip";
-    private List<String> _tripMember = new ArrayList<>();
+    private Set<String> _tripMember = new HashSet<>();
 
     public TripBuilder() {  }
 
@@ -30,7 +29,7 @@ public class TripBuilder {
         return this;
     }
 
-    public TripBuilder addMembers(List<String> _members) {
+    public TripBuilder addMember(Collection<String> _members) {
         this._tripMember.addAll(_members);
         return this;
     }
