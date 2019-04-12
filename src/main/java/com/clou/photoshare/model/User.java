@@ -24,7 +24,7 @@ public class User {
     private String email;
 
     // have a empty consturctor so we can constrcut object from DB
-    public User () {};
+    public User () {}
 
     public User(String id, String nickName, String firstName, String lastName, String email) {
         this.id = id;
@@ -43,17 +43,17 @@ public class User {
         this.id = id;
     }
 
-//    @DynamoDBAttribute(attributeName = "NickName")
+    @DynamoDBAttribute(attributeName = "NickName")
     public String getNickName() { return nickName; }
 
     public void setNickName(String nickName) { this.nickName = nickName; }
 
-//    @DynamoDBAttribute(attributeName = "Email")
+    @DynamoDBAttribute(attributeName = "Email")
     public String getEmail() { return email; }
 
     public void setEmail(String email) { this.email = email; }
 
-//    @DynamoDBAttribute(attributeName = "LastName")
+    @DynamoDBAttribute(attributeName = "LastName")
     public String getLastName() {
         return lastName;
     }
@@ -62,7 +62,7 @@ public class User {
         this.lastName = lastName;
     }
 
-//    @DynamoDBAttribute(attributeName = "FirstName")
+    @DynamoDBAttribute(attributeName = "FirstName")
     public String getFirstName() {
         return firstName;
     }
@@ -73,7 +73,7 @@ public class User {
 
     @Override
     public String toString() {
-        return String.format("User: id:%s, nickname: %s, firstname: %s, lastname: %s, email: %s",
+        return String.format("User: id: %s, nickname: %s, firstname: %s, lastname: %s, email: %s",
                 this.id, this.nickName, this.firstName, this.lastName, this.email);
     }
 
