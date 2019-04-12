@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Email;
+import java.util.List;
 
 @DynamoDBTable(tableName = "User")
 public class User {
@@ -23,6 +24,8 @@ public class User {
     @NotNull
     @Email
     private String email;
+
+    private List<User> friends;
 
     // have a empty consturctor so we can constrcut object from DB
     public User () {};
@@ -71,6 +74,11 @@ public class User {
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
+
+    @DynamoDBAttribute(attributeName = "Friends")
+    public List<User> getFriends() { return friends; }
+
+    public void setFriends(List<User> firends) { this.friends = friends; }
 
     @Override
     public String toString() {

@@ -14,4 +14,7 @@ public interface UserRepository extends CrudRepository<User, String> {
     List<User> findByLastName(String lastName);
     @EnableScan
     List<User> findByFirstName(String firstName);
+
+    @EnableScan
+    List<>
 }
