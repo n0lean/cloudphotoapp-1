@@ -26,10 +26,10 @@ import com.amazonaws.util.StringUtils;
 @EnableDynamoDBRepositories(basePackages = "com.clou.photoshare.repository")
 public class DynamoDBConfig {
 
-    @Value("${amazon.dynamodb.endpoint}")
+    @Value("${DYNAMODB_ENDPOINT}")
     private String dBEndpoint;
 
-    @Value("${amazon.dynamodb.region}")
+    @Value("${DYNAMODB_REGION}")
     private String region;
 
     @Value("${AWS_ACCESS_KEY}")

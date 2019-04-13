@@ -2,14 +2,9 @@ import os
 
 
 def parse_app_properties(s):
-    if '$' in s:
-        name = s[:s.index('=') + 1]
-        var_name = s[s.index('{') + 1: s.index('}')]
-        try:
-            ss = '{name}={env_var}'.format(name=name, env_var=os.environ[var_name])
-        except KeyError:
-            print('ERROR: ENV variable {} not found.'.format(var_name))
-            raise
+    name = s[:s.index('=')]
+    if name in os.environ:
+        ss = '{name}={env_var}'.format(name=name, env_var=os.environ[name])
         return ss
     else:
         return s
