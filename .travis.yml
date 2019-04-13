@@ -12,6 +12,9 @@ branches:
   only:
   - master
 
+before_script:
+
+
 script: "mvn cobertura:cobertura"
 
 after_success:

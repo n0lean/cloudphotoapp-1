@@ -37,18 +37,18 @@ public class UserController {
         return "success";
     }
 
-    @RequestMapping("/findAll")
-    public String findAll() {
-        String res = "";
-        Iterable<User> users = repository.findAll();
-
-        for (User user: users) {
-            // potential bug
-            return res += user.toString() + "<br>";
-        }
-
-        return res;
-    }
+//    @RequestMapping("/findAll")
+//    public String findAll() {
+//        String res = "";
+//        Iterable<User> users = repository.findAll();
+//
+//        for (User user: users) {
+//            // potential bug
+//            return res += user.toString() + "<br>";
+//        }
+//
+//        return res;
+//    }
 
 //    @RequestMapping("/findByID")
 //    public String findById(String id) {
