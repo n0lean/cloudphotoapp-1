@@ -14,8 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
@@ -41,6 +42,7 @@ public class PhotoDBTest {
     private DynamoDB dynamoDB;
     private String tableName = "Photo";
     private Class tableClass = Photo.class;
+    private List<String> uuids = new ArrayList<>();
 
     @Before
     public void setUp() throws Exception {
@@ -52,6 +54,7 @@ public class PhotoDBTest {
     public void PhotoTestCase() {
         UUID uuid = UUID.randomUUID();
         String uuid_str = uuid.toString();
+        uuids.add(uuid_str);
         Photo testPhoto = new PhotoBuilder()
                 .photoId(uuid_str)
                 .photoAddress("01010101")

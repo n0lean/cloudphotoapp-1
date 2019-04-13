@@ -3,8 +3,11 @@ package com.clou.photoshare.controller;
 import com.clou.photoshare.errorHandler.PhotoIsNullException;
 import com.clou.photoshare.errorHandler.PhotoNotFoundException;
 import com.clou.photoshare.model.Photo;
+import com.clou.photoshare.model.PhotoBuilder;
 import com.clou.photoshare.repository.PhotosRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
@@ -31,28 +34,37 @@ public class PhotoController {
         this.repository = repo;
     }
 
-    @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public String addPhoto(@RequestBody Photo photo){
-        if(!checkIsNull(photo)){
-            throw new PhotoIsNullException(photo);
+    @RequestMapping(value = "/new", method = RequestMethod.POST)
+    public ResponseEntity<?> addPhoto(@RequestBody Photo photo){
+        try {
+            if (!checkIsNull(photo)) {
+                throw new PhotoIsNullException(photo);
+            }
+            Photo newPhoto = new PhotoBuilder()
+                    .photoId(photo.getId())
+                    .addOwnerId(photo.getOwnerId())
+                    .photoAddress(photo.getAddress())
+                    .addTripId(photo.getTripsId())
+                    .addViewerId(photo.getViewersId())
+                    .buildPhoto();
+
+            repository.save(newPhoto);
+            return new ResponseEntity<>(newPhoto, HttpStatus.CREATED);
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(e.toString());
         }
-        repository.save(photo);
-        return "add ph oto success";
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public Photo getPhoto(@PathVariable String id) {
-        return repository.findById(id).orElseThrow(()-> new PhotoNotFoundException(id));
+    public ResponseEntity<?> getPhoto(@PathVariable String id) {
+        try{
+            Photo photo = repository.findById(id).orElseThrow(()-> new PhotoNotFoundException(id));
+            return new ResponseEntity<>(photo, HttpStatus.OK);
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(e.toString());
+        }
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.POST)
-    public String updatePhoto(@RequestBody Photo photo){
-        if(!checkIsNull(photo)){
-            throw new PhotoIsNullException(photo);
-        }
-        repository.save(photo);
-        return "update photo success";
-    }
 
     @RequestMapping(value = "/testsave",method = RequestMethod.GET)
     public String testsave(){
@@ -67,20 +79,33 @@ public class PhotoController {
     }
 
     @RequestMapping(value = "/findAll", method = RequestMethod.GET)
-    public String findAll(){
-        String res = "";
-        Iterable<Photo> photos = repository.findAll();
+    public ResponseEntity<?> findAll(){
+        try {
+            String res = "";
+            Iterable<Photo> photos = repository.findAll();
+            for(Photo photo:photos){
+                res += photo.toString() + "<br>";
+            }
 
-        for(Photo photo:photos){
-            return res += photo.toString() + "<br>";
+            return new ResponseEntity<>(res, HttpStatus.OK);
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(e.toString());
         }
-
-        return res;
     }
 
     @RequestMapping(value = "/delete{id}", method = RequestMethod.DELETE)
-    public String deletePhoto(@PathVariable String id){
-        repository.deleteById(id);
-        return "delete success";
+    public ResponseEntity<?> deletePhoto(@PathVariable String id){
+        try {
+            if (repository.findById(id).isPresent()){
+                repository.deleteById(id);
+                return new ResponseEntity<>(HttpStatus.OK);
+
+            }else{
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(e.toString());
+        }
+
     }
 }
