@@ -8,4 +8,17 @@ Run this
 ln -s .precommit/pre-commit.py .git/hooks/pre-commit
 ```
 
+## Set your application.properties in your ENV Variable.
+
+E.g.
+```properties
+
+amazon.dynamodb.region=us-east-1
+amazon.dynamodb.endpoint=http://localhost:8000/
+# OR amazon.dynamodb.endpoint=http://dynamodb.us-west-1.amazonaws.com
+AWS_ACCESS_KEY=aaa
+AWS_ACCESS_KEY_ID=aaa
+
+```
+
 

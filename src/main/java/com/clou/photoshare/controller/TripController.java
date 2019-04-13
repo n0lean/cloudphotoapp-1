@@ -31,7 +31,7 @@ public class TripController {
                         .buildTrip();
 
             repository.save(new_trip);
-            return ResponseEntity.ok(new_trip);
+            return new ResponseEntity<>(new_trip, HttpStatus.OK);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.toString());
         }
@@ -42,7 +42,7 @@ public class TripController {
         try {
             if (repository.findById(id).isPresent()) {
                 Trip trip = repository.findById(id).get();
-                return ResponseEntity.ok(trip);
+                return new ResponseEntity<>(trip, HttpStatus.OK);
             }
             else {
                 return ResponseEntity.notFound().build();
@@ -57,7 +57,7 @@ public class TripController {
         try {
             if (repository.findById(trip.getId()).isPresent()) {
                 repository.save(trip);
-                return ResponseEntity.ok(trip);
+                return new ResponseEntity<>(trip, HttpStatus.OK);
             }
             else {
                 return ResponseEntity.notFound().build();

@@ -30,8 +30,9 @@ import static org.junit.Assert.*;
 @WebAppConfiguration
 @TestPropertySource(properties = {
         "amazon.dynamodb.endpoint=http://localhost:8000/",
-        "amazon.aws.accesskey=test1",
-        "amazon.aws.secretkey=test231" })
+        "amazon.dynamodb.region=us-east-1",
+        "AWS_ACCESS_KEY=test1",
+        "AWS_ACCESS_KEY_ID=test231" })
 public class TripDBTest {
     @ClassRule
     public static LocalTestRule dynamoDBRule = new LocalTestRule();
