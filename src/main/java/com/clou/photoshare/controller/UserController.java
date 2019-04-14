@@ -9,6 +9,8 @@ import com.clou.photoshare.model.User;
 
 import com.clou.photoshare.repository.UserRepository;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -37,6 +39,12 @@ public class UserController {
         repository.save(user);
         return "success";
     }
+
+    @RequestMapping(value = "/{id}/friends", method = RequestMethod.GET)
+    public List<User> getFriends(@PathVariable String id) {
+
+    }
+
 
     @RequestMapping("/testsave")
     public String testsave() {
