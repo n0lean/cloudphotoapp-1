@@ -76,6 +76,18 @@ public class Trip {
         this.tripMember.removeAll(memberId);
     }
 
+    public boolean isTripMember(String memberId) {
+        return this.tripMember.contains(memberId);
+    }
+
+    public ArrayList<Boolean> isTripMember(Collection<String> memberId) {
+        ArrayList<Boolean> result = new ArrayList<>();
+        for (String member : memberId) {
+            result.add(this.tripName.contains(member));
+        }
+        return result;
+    }
+
     @Override
     public String toString() {
         String joinedTripMemberId = String.join(",", this.tripMember);

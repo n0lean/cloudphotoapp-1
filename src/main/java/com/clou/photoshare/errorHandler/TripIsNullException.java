@@ -1,4 +1,7 @@
 package com.clou.photoshare.errorHandler;
 
-public class TripIsNullException {
+import com.clou.photoshare.model.Trip;
+
+public class TripIsNullException extends RuntimeException{
+    public TripIsNullException(Trip trip) { super("Trip id is null" + trip); }
 }
