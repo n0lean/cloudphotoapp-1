@@ -11,14 +11,16 @@ public class PhotoBuilder {
     private Set<String> _tripsId = new HashSet<>();
 
     public PhotoBuilder(){
-        this._tripsId.add("NUll");
-        this._tripsId.add("NUll");
     }
 
     public Photo buildPhoto() {
-        Photo ph = new Photo(this._id, this._owenerId,this._address);
-        ph.setViewersId(this._viewersId);
-        ph.setTripsId(this._tripsId);
+        Photo ph = new Photo(this._id, this._owenerId, this._address);
+        if(this._viewersId.size() != 0) {
+            ph.setViewersId(this._viewersId);
+        }
+        if(this._tripsId.size() != 0) {
+            ph.setTripsId(this._tripsId);
+        }
         return ph;
     }
 
@@ -38,33 +40,21 @@ public class PhotoBuilder {
     }
 
     public PhotoBuilder addViewerId(Collection<String> viewersId){
-        if(this._viewersId.contains("NULL")){
-            this._viewersId.remove("NULL");
-        }
         this._viewersId.addAll(viewersId);
         return this;
     }
 
     public PhotoBuilder addOneViewerId(String viewersId){
-        if(this._viewersId.contains("NULL")){
-            this._viewersId.remove("NULL");
-        }
         this._viewersId.add(viewersId);
         return this;
     }
 
     public PhotoBuilder addTripId(Collection<String> tripsId){
-        if(this._tripsId.contains("NULL")){
-            this._tripsId.remove("NULL");
-        }
         this._tripsId.addAll(tripsId);
         return this;
     }
 
     public PhotoBuilder addOneTripId(String tripsId){
-        if(this._tripsId.contains("NULL")){
-            this._tripsId.remove("NULL");
-        }
         this._tripsId.add(tripsId);
         return this;
     }

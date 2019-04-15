@@ -6,6 +6,8 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 
 
 import javax.validation.constraints.NotNull;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -24,21 +26,23 @@ public class Photo {
 
 
     public Photo(){
+        this.viewersId = new HashSet<>(Arrays.asList("NULL"));
+        this.tripsId = new HashSet<>(Arrays.asList("NULL"));
     }
 
     public Photo(String id, String ownerId){
         this.id = id;
         this.ownerId = ownerId;
-        this.viewersId = new HashSet<>();
-        this.tripsId = new HashSet<>();
+        this.viewersId = new HashSet<>(Arrays.asList("NULL"));
+        this.tripsId = new HashSet<>(Arrays.asList("NULL"));
     }
 
     public Photo(String id, String ownerId, String address){
         this.id = id;
         this.ownerId = ownerId;
         this.address = address;
-        this.viewersId = new HashSet<>();
-        this.tripsId = new HashSet<>();
+        this.viewersId = new HashSet<>(Arrays.asList("NULL"));
+        this.tripsId = new HashSet<>(Arrays.asList("NULL"));
     }
 
 
@@ -83,10 +87,16 @@ public class Photo {
     }
 
     public void setViewersId( Set<String> viewersId){
-        this.viewersId = viewersId;
+        if(this.viewersId.contains("NULL")){
+            this.viewersId.remove("NULL");
+        }
+        this.viewersId.addAll(viewersId);
     }
 
-    public void addViewersId( String viewerId ){
+    public void addOneViewerId( String viewerId ){
+        if(this.viewersId.contains("NULL")){
+            this.viewersId.remove("NULL");
+        }
         this.viewersId.add(viewerId);
     }
 
@@ -101,10 +111,17 @@ public class Photo {
     }
 
     public void setTripsId(Set<String> tripsId){
-        this.tripsId = tripsId;
+        if(this.tripsId.contains("NULL")){
+            this.tripsId.remove("NULL");
+        }
+        this.tripsId.addAll(tripsId);
     }
 
-    public void addTripsId(String tripId){
+
+    public void addOneTripId(String tripId){
+        if(this.tripsId.contains("NULL")){
+            this.tripsId.remove("NULL");
+        }
         this.tripsId.add(tripId);
     }
 

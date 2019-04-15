@@ -60,7 +60,10 @@ public class PhotoDBTest {
                 .photoAddress("01010101")
                 .addOwnerId("huxin")
                 .addOneTripId("MYC")
+                .addOneTripId("LA")
                 .addOneViewerId("anda")
+                .addOneViewerId("zhengzhi")
+                .addOneViewerId("pengyu")
                 .buildPhoto();
 
         repo.save(testPhoto);
