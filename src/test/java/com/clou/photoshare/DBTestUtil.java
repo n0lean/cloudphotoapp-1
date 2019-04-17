@@ -40,7 +40,6 @@ public class DBTestUtil {
         try {
             System.out.println("Issuing DeleteTable request for " + tableName);
             table.delete();
-
             System.out.println("Waiting for " + tableName + " to be deleted...this may take a while...");
 
             table.waitForDelete();
