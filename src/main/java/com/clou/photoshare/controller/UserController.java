@@ -4,18 +4,15 @@ import com.clou.photoshare.model.UserBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
 import com.clou.photoshare.model.User;
-
 import com.clou.photoshare.repository.UserRepository;
 
-import java.util.List;
 
 @RestController
 @RequestMapping("/users")
 public class UserController {
 
-    final UserRepository repository;
+    private final UserRepository repository;
 
     @Autowired
     public UserController(UserRepository repo) {
@@ -40,36 +37,18 @@ public class UserController {
         return "success";
     }
 
-    @RequestMapping(value = "/{id}/friends", method = RequestMethod.GET)
-    public List<User> getFriends(@PathVariable String id) {
-
-    }
-
-
-    @RequestMapping("/testsave")
-    public String testsave() {
-        repository.save(
-                new UserBuilder()
-                        .id("id")
-                        .nickName("nickname")
-                        .email("123@abc.com")
-                        .buildUser()
-        );
-        return "Done";
-    }
-
-    @RequestMapping("/findAll")
-    public String findAll() {
-        String res = "";
-        Iterable<User> users = repository.findAll();
-
-        for (User user: users) {
-            // potential bug
-            return res += user.toString() + "<br>";
-        }
-
-        return res;
-    }
+//    @RequestMapping("/findAll")
+//    public String findAll() {
+//        String res = "";
+//        Iterable<User> users = repository.findAll();
+//
+//        for (User user: users) {
+//            // potential bug
+//            return res += user.toString() + "<br>";
+//        }
+//
+//        return res;
+//    }
 
 //    @RequestMapping("/findByID")
 //    public String findById(String id) {

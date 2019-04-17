@@ -20,19 +20,22 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 import com.amazonaws.util.StringUtils;
-import com.amazonaws.regions.Regions;
+
 
 @Configuration
 @EnableDynamoDBRepositories(basePackages = "com.clou.photoshare.repository")
 public class DynamoDBConfig {
 
-    @Value("${amazon.dynamodb.endpoint}")
+    @Value("${DYNAMODB_ENDPOINT}")
     private String dBEndpoint;
 
-    @Value("${amazon.aws.accesskey}")
+    @Value("${DYNAMODB_REGION}")
+    private String region;
+
+    @Value("${AWS_ACCESS_KEY}")
     private String accessKey;
 
-    @Value("${amazon.aws.secretkey}")
+    @Value("${AWS_ACCESS_KEY_ID}")
     private String secretKey;
 
     public AWSCredentialsProvider amazonAWSCredentialsProvider() {
@@ -56,25 +59,11 @@ public class DynamoDBConfig {
 
     @Bean
     public AmazonDynamoDB amazonDynamoDB() {
-        return AmazonDynamoDBClientBuilder.standard()
-//                .withCredentials(amazonAWSCredentialsProvider())
-                .withRegion(Regions.US_EAST_1).build();
+         return AmazonDynamoDBClientBuilder.standard()
+                 .withCredentials(amazonAWSCredentialsProvider())
+                 .withEndpointConfiguration(
+                        new AwsClientBuilder.EndpointConfiguration(dBEndpoint, region)
+                 ).build();
     }
 
-
-//    @Bean
-//    public AmazonDynamoDB amazonDynamoDB() {
-//         Deprecated
-//         AmazonDynamoDB dynamoDB = new AmazonDynamoDBClient(amazonAWSCredentials());
-
-//        return AmazonDynamoDBClientBuilder.standard()
-//                        .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(
-//                                this.dBEndpoint, "us-east-1"))
-//                        .build();
-
-//        if (!StringUtils.isNullOrEmpty(dBEndpoint)) {
-//            // Deprecated
-//             dynamoDB.setEndpoint(dBEndpoint);
-//        }
-//        return dynamoDB;
 }
