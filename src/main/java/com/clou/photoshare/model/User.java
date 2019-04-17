@@ -7,6 +7,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Email;
+import java.util.ArrayList;
 import java.util.List;
 
 @DynamoDBTable(tableName = "User")
@@ -35,6 +36,7 @@ public class User {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+        this.friends = new ArrayList<>();
     }
 
     @DynamoDBHashKey(attributeName = "Id")
