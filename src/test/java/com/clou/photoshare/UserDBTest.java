@@ -110,6 +110,30 @@ public class UserDBTest {
         assertFalse(repo.existsById(uuid_str));
     }
 
+//    @Test
+//    public void findAllTest() {
+//        UUID uuid = UUID.randomUUID();
+//        String uuid_str = uuid.toString();
+//        User testUser = new UserBuilder()
+//                .email("test@me.com")
+//                .id(uuid_str)
+//                .nickName("test")
+//                .firstName("c")
+//                .lastName("a")
+//                .buildUser();
+//        repo.save(testUser);
+//
+//        List<User> result = (List<User>) repo.findAll();
+//
+//        assertEquals("Only one user", 1, result.size());
+//        assertEquals(uuid_str, result.get(0).getId());
+//        assertEquals(1, result.size());
+//
+//        repo.delete(testUser);
+//        assertFalse(repo.existsById(uuid_str));
+//    }
+
+
     @After
     public void tearDown() {
         DBTestUtil.deleteExampleTable(dynamoDB, tableName);

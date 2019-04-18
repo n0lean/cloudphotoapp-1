@@ -66,9 +66,6 @@ public class TripController {
             return ResponseEntity.badRequest().body(e.toString());
         }
     }
-
-
-
-
+    
 
 }

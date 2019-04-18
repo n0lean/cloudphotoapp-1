@@ -7,6 +7,8 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Email;
+import java.util.ArrayList;
+import java.util.List;
 
 @DynamoDBTable(tableName = "User")
 public class User {
@@ -23,6 +25,8 @@ public class User {
     @Email
     private String email;
 
+    private List<User> friends;
+
     // have a empty consturctor so we can constrcut object from DB
     public User () {}
 
@@ -32,6 +36,7 @@ public class User {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+        this.friends = new ArrayList<>();
     }
 
     @DynamoDBHashKey(attributeName = "Id")
@@ -70,6 +75,11 @@ public class User {
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
+
+    @DynamoDBAttribute(attributeName = "Friends")
+    public List<User> getFriends() { return friends; }
+
+    public void setFriends(List<User> firends) { this.friends = friends; }
 
     @Override
     public String toString() {

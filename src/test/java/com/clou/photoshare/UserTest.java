@@ -1,8 +1,11 @@
 package com.clou.photoshare;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Set;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.UUID;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -14,8 +17,7 @@ import com.clou.photoshare.controller.UserController;
 import com.clou.photoshare.model.User;
 import com.clou.photoshare.model.UserBuilder;
 import com.clou.photoshare.repository.UserRepository;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 
 import static org.junit.Assert.assertEquals;
 
@@ -32,15 +34,56 @@ import com.amazonaws.services.dynamodbv2.model.ListTablesResult;
 import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
 import com.amazonaws.services.dynamodbv2.model.ScalarAttributeType;
 import com.amazonaws.services.dynamodbv2.model.TableDescription;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 
-
+@RunWith(SpringJUnit4ClassRunner.class)
+@SpringBootTest(classes = PhotoshareApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@TestPropertySource(properties = {
+        "amazon.dynamodb.endpoint=http://localhost:8000/",
+        "amazon.dynamodb.region=us-east-1",
+        "AWS_ACCESS_KEY=test1",
+        "AWS_ACCESS_KEY_ID=test231" })
 public class UserTest {
+
+    @LocalServerPort
+    private int port;
+
+    @ClassRule
+    public static LocalTestRule dynamoDBRule = new LocalTestRule();
+
+    @Autowired
+    private AmazonDynamoDB amazonDynamoDB;
+
+    @Autowired
+    UserRepository repo;
+
+    private DynamoDB dynamoDB;
+    private String tableName = "User";
+    private Class tableClass = User.class;
     private static Validator validator;
+
+    private String createURLWithPort(String uri) {
+        return "http://localhost:" + port + uri;
+    }
 
     @BeforeClass
     public static void setUpValidator() {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         validator = factory.getValidator();
+    }
+
+    @Before
+    public void setUp() throws Exception {
+        this.dynamoDB = new DynamoDB(amazonDynamoDB);
+        DBTestUtil.createExampleTable(amazonDynamoDB,  dynamoDB, tableName, tableClass);
     }
 
     @Test
@@ -82,6 +125,38 @@ public class UserTest {
         }
     }
 
+    @Test
+    public void testUpdateUser() throws URISyntaxException {
+        TestRestTemplate restTemplate = new TestRestTemplate();
+
+        UUID uuid = java.util.UUID.randomUUID();
+        String uuid_str = uuid.toString();
+        final String baseurl = createURLWithPort("/users/" + uuid_str);
+
+        URI uri = new URI(baseurl);
+
+        User testUser = new UserBuilder()
+                .email("test@me.com")
+                .id(uuid_str)
+                .lastName("test")
+                .firstName("before")
+                .nickName("nicname")
+                .buildUser();
+
+        repo.save(testUser);
+
+        // assert user has been saved
+        ResponseEntity<User> res = restTemplate.getForEntity(uri, User.class);
+        assertEquals(200, res.getStatusCodeValue());
+        assertEquals("before", res.getBody().getFirstName());
+
+        testUser.setFirstName("after");
+        ResponseEntity<User> res2 = restTemplate.postForEntity(uri, testUser, User.class);
+        User newUser = repo.findById(testUser.getId()).get();
+        assertEquals(201, res2.getStatusCodeValue());
+        assertEquals("after", newUser.getFirstName());
+    }
+
     private static CreateTableResult createTable(AmazonDynamoDB ddb, String tableName, String hashKeyName) {
         List<AttributeDefinition> attributeDefinitions = new ArrayList<AttributeDefinition>();
         attributeDefinitions.add(new AttributeDefinition(hashKeyName, ScalarAttributeType.S));
@@ -114,6 +189,11 @@ public class UserTest {
         tableRequest.setProvisionedThroughput(
                 new ProvisionedThroughput(1L, 1L));
         amazonDynamoDB.createTable(tableRequest);
+    }
+
+    @After
+    public void tearDown() {
+        DBTestUtil.deleteExampleTable(dynamoDB, tableName);
     }
 
 

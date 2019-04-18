@@ -2,10 +2,15 @@ package com.clou.photoshare.controller;
 
 import com.clou.photoshare.model.UserBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import com.clou.photoshare.model.User;
 import com.clou.photoshare.repository.UserRepository;
+
+import java.util.Optional;
+import java.util.OptionalInt;
 
 
 @RestController
@@ -21,38 +26,38 @@ public class UserController {
 
 
     @RequestMapping(value = "/save", method = RequestMethod.POST) // didn't use @ModelAttribute, decide later after know Congito
-    public String addUser(@RequestBody User user) {
-        repository.save(user);
-        return "success";
+    public ResponseEntity<?> addUser(@RequestBody User user) {
+        try{
+            repository.save(user);
+            return new ResponseEntity<>(user, HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.toString());
+        }
+
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public User getUser(@PathVariable String id) {
-        return repository.findById(id).get(); // naive approach, return's a User JSON
+    public ResponseEntity<?> getUser(@PathVariable String id) {
+        // return repository.findById(id).get(); // naive approach, return's a User JSON
+
+        return Optional
+                .ofNullable(repository.findById(id))
+                .map(user -> ResponseEntity.ok().body(user))
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.POST)
-    public String updateUser(@RequestBody User user) {
-        repository.save(user);
-        return "success";
+    public ResponseEntity<?> updateUser(@RequestBody User user) {
+        try {
+            if (repository.findById(user.getId()).isPresent()) {
+                repository.save(user);
+                return new ResponseEntity<>(user, HttpStatus.CREATED);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.toString());
+        }
     }
-
-//    @RequestMapping("/findAll")
-//    public String findAll() {
-//        String res = "";
-//        Iterable<User> users = repository.findAll();
-//
-//        for (User user: users) {
-//            // potential bug
-//            return res += user.toString() + "<br>";
-//        }
-//
-//        return res;
-//    }
-
-//    @RequestMapping("/findByID")
-//    public String findById(String id) {
-//        Potential bug
-//        return repository.findById(id);
-//    }
 }

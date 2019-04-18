@@ -97,6 +97,13 @@
         </dependency>
         <!--End AWS related-->
 
+        <dependency>
+            <groupId>com.adobe.testing</groupId>
+            <artifactId>s3mock-junit4</artifactId>
+            <version>2.1.0</version>
+            <scope>test</scope>
+        </dependency>
+
         <!--Swagger related-->
         <dependency>
             <groupId>io.springfox</groupId>
