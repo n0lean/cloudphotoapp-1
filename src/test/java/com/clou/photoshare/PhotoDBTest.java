@@ -58,7 +58,7 @@ public class PhotoDBTest {
         Photo testPhoto = new PhotoBuilder()
                 .photoId(uuid_str)
                 .photoAddress("01010101")
-                .addOwnerId("huxin")
+                .ownerId("huxin")
                 .addOneTripId("MYC")
                 .addOneTripId("LA")
                 .addOneViewerId("anda")

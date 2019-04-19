@@ -34,7 +34,7 @@ public class PhotoBuilder {
         return this;
     }
 
-    public PhotoBuilder addOwnerId(String ownerId){
+    public PhotoBuilder ownerId(String ownerId){
         this._owenerId = ownerId;
         return this;
     }

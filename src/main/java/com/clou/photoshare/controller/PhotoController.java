@@ -5,6 +5,7 @@ import com.clou.photoshare.errorHandler.PhotoNotFoundException;
 import com.clou.photoshare.model.Photo;
 import com.clou.photoshare.model.PhotoBuilder;
 import com.clou.photoshare.repository.PhotosRepository;
+import com.clou.photoshare.services.PhotoDistributionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,7 +43,7 @@ public class PhotoController {
             }
             Photo newPhoto = new PhotoBuilder()
                     .photoId(photo.getId())
-                    .addOwnerId(photo.getOwnerId())
+                    .ownerId(photo.getOwnerId())
                     .photoAddress(photo.getAddress())
                     .addTripId(photo.getTripsId())
                     .addViewerId(photo.getViewersId())
@@ -107,5 +108,21 @@ public class PhotoController {
             return ResponseEntity.badRequest().body(e.toString());
         }
 
+    }
+
+    @RequestMapping(value = "/testface", method = RequestMethod.GET)
+    public String testFace() {
+        PhotoDistributionService photoService = new PhotoDistributionService();
+        Photo testPhoto = new PhotoBuilder()
+                                .ownerId("123")
+                                .photoAddress("123")
+                                .photoId("123")
+                                .buildPhoto();
+
+        try {
+            return photoService.getFaces(testPhoto);
+        } catch (Exception e) {
+            return "Error" + e.toString();
+        }
     }
 }

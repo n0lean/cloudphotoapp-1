@@ -71,7 +71,7 @@ public class PhotoTest {
         Photo testPhoto = new PhotoBuilder()
                 .photoId(uuid_str)
                 .photoAddress("01010101")
-                .addOwnerId("huxin")
+                .ownerId("huxin")
                 .addOneTripId("MYC")
                 .addOneViewerId("anda")
                 .buildPhoto();
@@ -97,7 +97,7 @@ public class PhotoTest {
         Photo testPhoto = new PhotoBuilder()
                 .photoId(uuid_str)
                 .photoAddress("03030303")
-                .addOwnerId("oliver")
+                .ownerId("oliver")
                 .addOneTripId("MYC")
                 .addOneViewerId("anda")
                 .buildPhoto();
@@ -123,7 +123,7 @@ public class PhotoTest {
         Photo testPhoto = new PhotoBuilder()
                 .photoId(uuid_str)
                 .photoAddress("01010101")
-                .addOwnerId("huxin")
+                .ownerId("huxin")
                 .addOneTripId("MYC")
                 .addOneViewerId("anda")
                 .buildPhoto();
