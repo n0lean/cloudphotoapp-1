@@ -10,17 +10,26 @@ import com.amazonaws.services.rekognition.model.DetectFacesResult;
 import com.amazonaws.services.rekognition.model.Image;
 import com.amazonaws.services.rekognition.model.S3Object;
 import com.clou.photoshare.model.Photo;
+import io.swagger.annotations.AuthorizationScope;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class PhotoDistributionService {
 
+    @Autowired
+    private AWSCredentialsProvider awsCredentialsProvider;
+
     private AmazonRekognition rekoclient;
 
-    public PhotoDistributionService () {
-        DefaultAWSCredentialsProviderChain credProvider = new DefaultAWSCredentialsProviderChain();
-        this.rekoclient = AmazonRekognitionClientBuilder.standard().withCredentials(credProvider).build();
+//    public PhotoDistributionService () {
+//        DefaultAWSCredentialsProviderChain credProvider = new DefaultAWSCredentialsProviderChain();
+//        this.rekoclient = AmazonRekognitionClientBuilder.standard().withCredentials(credProvider).build();
+//    }
+
+
+    public PhotoDistributionService() {
+        this.rekoclient = AmazonRekognitionClientBuilder.standard().withCredentials(awsCredentialsProvider).build();
     }
 
     // For testing, not to be used in production
