@@ -17,20 +17,20 @@ import org.springframework.stereotype.Component;
 @Component
 public class PhotoDistributionService {
 
-    @Autowired
-    private AWSCredentialsProvider awsCredentialsProvider;
+//    @Autowired
+//    private AWSCredentialsProvider awsCredentialsProvider;
 
     private AmazonRekognition rekoclient;
 
-//    public PhotoDistributionService () {
-//        DefaultAWSCredentialsProviderChain credProvider = new DefaultAWSCredentialsProviderChain();
-//        this.rekoclient = AmazonRekognitionClientBuilder.standard().withCredentials(credProvider).build();
-//    }
-
-
-    public PhotoDistributionService() {
-        this.rekoclient = AmazonRekognitionClientBuilder.standard().withCredentials(awsCredentialsProvider).build();
+    public PhotoDistributionService () {
+        DefaultAWSCredentialsProviderChain credProvider = new DefaultAWSCredentialsProviderChain();
+        this.rekoclient = AmazonRekognitionClientBuilder.standard().withCredentials(credProvider).build();
     }
+
+
+//    public PhotoDistributionService() {
+//        this.rekoclient = AmazonRekognitionClientBuilder.standard().withCredentials(awsCredentialsProvider).build();
+//    }
 
     // For testing, not to be used in production
     public String getFaces(Photo photo) {
