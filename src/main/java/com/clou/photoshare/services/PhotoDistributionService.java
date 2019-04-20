@@ -1,6 +1,8 @@
 package com.clou.photoshare.services;
 
 
+import com.amazonaws.auth.AWSCredentialsProvider;
+import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
 import com.amazonaws.services.rekognition.AmazonRekognition;
 import com.amazonaws.services.rekognition.AmazonRekognitionClientBuilder;
 import com.amazonaws.services.rekognition.model.DetectFacesRequest;
@@ -8,19 +10,24 @@ import com.amazonaws.services.rekognition.model.DetectFacesResult;
 import com.amazonaws.services.rekognition.model.Image;
 import com.amazonaws.services.rekognition.model.S3Object;
 import com.clou.photoshare.model.Photo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class PhotoDistributionService {
 
-    public PhotoDistributionService () { }
+    private AmazonRekognition rekoclient;
 
-    // For testing, may not be used in production
+    public PhotoDistributionService () {
+        DefaultAWSCredentialsProviderChain credProvider = new DefaultAWSCredentialsProviderChain();
+        this.rekoclient = AmazonRekognitionClientBuilder.standard().withCredentials(credProvider).build();
+    }
+
+    // For testing, not to be used in production
     public String getFaces(Photo photo) {
 
         AmazonRekognition rekoclient = AmazonRekognitionClientBuilder.defaultClient();
 
-        // use this later
-//        String photoName = Photo.getS3Address().getName();
-//        String photoBucketName = Photo.getS3Address().getBucketName();
 
         String photoName = "testkey";
         String photoBucketName = "anda-bucket-cloudphoto-app";
