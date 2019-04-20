@@ -21,4 +21,14 @@ AWS_ACCESS_KEY_ID=aaa
 
 ```
 
+## Set AWS Credentials for development
+
+1. Configure AWS Command Line (add a user to aws cli)
+```bash
+aws configure --profile <username>
+```
+2. Enter AWS Credientials, default-zone: us-east-1
+
+
+
 
