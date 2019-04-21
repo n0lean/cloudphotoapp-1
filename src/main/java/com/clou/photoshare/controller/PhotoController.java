@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import sun.net.ResourceManager;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -149,5 +150,12 @@ public class PhotoController {
         } catch (Exception e) {
             return "Error" + e.toString();
         }
+    }
+
+
+    //TODO: a test method for compareFace using FaceDistributionService
+    @RequestMapping(value = "/compareface", method = RequestMethod.GET)
+    public String compareFace() {
+        return "";
     }
 }
