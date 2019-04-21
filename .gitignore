@@ -1,6 +1,0 @@
-# User-specific stuff
-.DS_Store
-.idea/*
-native-libs/*
-target/*
-.gitignore
