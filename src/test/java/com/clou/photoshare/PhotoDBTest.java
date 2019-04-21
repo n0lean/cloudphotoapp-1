@@ -71,7 +71,7 @@ public class PhotoDBTest {
         assertEquals(testPhoto.getId(), result.getId());
         assertEquals(testPhoto.getPhotoKey(), result.getPhotoKey());
         assertEquals(testPhoto.getOwnerId(), result.getOwnerId());
-        assertEquals(testPhoto.getTripsId(), result.getTripsId());
+        assertEquals(testPhoto.getTripId(), result.getTripId());
         assertEquals(testPhoto.getViewersId(),result.getViewersId());
         for (String s : result.getViewersId()) {
             assertTrue(testPhoto.getViewersId().contains(s));

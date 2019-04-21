@@ -25,7 +25,7 @@ public class PhotoController {
 
     public boolean checkIsNull(Photo photo){
         if(photo.getId().isEmpty() || photo.getOwnerId().isEmpty()
-                ||photo.getTripsId().isEmpty() || photo.getPhotoKey().isEmpty()){
+                ||photo.getTripId().isEmpty() || photo.getPhotoKey().isEmpty()){
             return false;
         }
         return true;
@@ -46,7 +46,7 @@ public class PhotoController {
                     .photoId(photo.getId())
                     .ownerId(photo.getOwnerId())
                     .photoKey(photo.getPhotoKey())
-                    .tripId(photo.getTripsId())
+                    .tripId(photo.getTripId())
                     .addViewerId(photo.getViewersId())
                     .buildPhoto();
             newPhoto.addViewerId(newPhoto.getOwnerId());
@@ -114,6 +114,8 @@ public class PhotoController {
             for(Photo photo:photos){
                 res += photo.toString() + "<br>";
             }
+
+            //to do : add Elastic Search module
 
             return new ResponseEntity<>(res, HttpStatus.OK);
         }catch (Exception e){

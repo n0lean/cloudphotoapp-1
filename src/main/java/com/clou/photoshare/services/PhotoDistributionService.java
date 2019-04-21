@@ -84,8 +84,8 @@ public class PhotoDistributionService {
 
     // return an AWS Image object
     public Image awsImageConstructor(Photo photo) {
-        String targetPhotoBucket = photo.getAddress().getAddressBucket();
-        String targetPhotoKey = photo.getAddress().getAddressKey();
+        String targetPhotoBucket = photo.getBucketName();
+        String targetPhotoKey = photo.getPhotoKey();
 
         Image img = new Image().withS3Object(new S3Object()
                                         .withBucket(targetPhotoBucket)

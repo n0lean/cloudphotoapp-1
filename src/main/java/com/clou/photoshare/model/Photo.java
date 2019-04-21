@@ -26,7 +26,7 @@ public class Photo {
     @NotNull
     private String photoKey;
     @NotNull
-    private String tripsId;
+    private String tripId;
 
     private Set<String> viewersId;
 
@@ -35,19 +35,19 @@ public class Photo {
         this.viewersId = new HashSet<>();
     }
 
-    public Photo(String id, String ownerId, String photoKey, String tripsId){
+    public Photo(String id, String ownerId, String photoKey, String tripId){
         this.id = id;
         this.ownerId = ownerId;
         this.photoKey = photoKey;
-        this.tripsId = tripsId;
+        this.tripId = tripId;
         this.viewersId = new HashSet<>();
     }
 
-    public Photo(String id, String ownerId, String photoKey, String tripsId, Set<String> viewersId){
+    public Photo(String id, String ownerId, String photoKey, String tripId, Set<String> viewersId){
         this.id = id;
         this.ownerId = ownerId;
         this.photoKey = photoKey;
-        this.tripsId = tripsId;
+        this.tripId = tripId;
         this.viewersId = viewersId;
     }
 
@@ -99,13 +99,13 @@ public class Photo {
         this.viewersId.addAll(viewerId);
     }
 
-    @DynamoDBAttribute(attributeName = "TripsId")
-    public String getTripsId(){
-        return this.tripsId;
+    @DynamoDBAttribute(attributeName = "TripId")
+    public String getTripId(){
+        return this.tripId;
     }
 
-    public void setTripsId(String tripsId){
-        this.tripsId = tripsId;
+    public void setTripId(String tripsId){
+        this.tripId = tripId;
     }
 
     @DynamoDBAttribute(attributeName = "BucketName")
@@ -131,7 +131,7 @@ public class Photo {
         if(this.viewersId.size() != 0){
             joinedViewersId = String.join(",",this.viewersId);
         }
-        return String.format("Photo[id='%s', address='%s', OwnerId='%s',ViewersId='%s', tripsId='%s']",id, photoKey, ownerId,joinedViewersId,tripsId);
+        return String.format("Photo[id='%s', address='%s', OwnerId='%s',ViewersId='%s', tripsId='%s']",id, photoKey, ownerId,joinedViewersId,tripId);
     }
 
 }
