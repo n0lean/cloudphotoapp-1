@@ -19,9 +19,12 @@ public class Photo {
     private String id;
     private String ownerId;
 
+    //TODO: Change type to S3Address
     private String address;
 
     private Set<String> viewersId;
+
+    //TODO:  Change type to String
     private Set<String> tripsId;
 
 

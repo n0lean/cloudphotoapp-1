@@ -9,6 +9,7 @@ import com.amazonaws.services.rekognition.model.*;
 import com.clou.photoshare.model.Photo;
 import io.swagger.annotations.AuthorizationScope;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.print.attribute.standard.Compression;
@@ -20,7 +21,15 @@ public class PhotoDistributionService {
     @Autowired
     private AWSCredentialsProvider awsCredentialsProvider;
 
+    @Autowired
+    private TripService tripService;
+
+    @Autowired
+    private PhotoService photoService;
+
     private AmazonRekognition rekoclient;
+
+    private float similarityThreshold = 0.7f;
 
     // this can be use for development
 //    public PhotoDistributionService () {
@@ -31,6 +40,57 @@ public class PhotoDistributionService {
 
     public PhotoDistributionService() {
         this.rekoclient = AmazonRekognitionClientBuilder.standard().withCredentials(awsCredentialsProvider).build();
+    }
+
+
+
+    // main function
+    public void assignViewer(Photo photo) {
+
+        String tripId = photo.getTripId();
+
+        // get list of Images that holds the profile photo of each people in that trip
+        List<Photo> userProfilePhotos = tripService.getProfilePhotosByTripId(tripId);
+
+        Image targetImage = awsImageConstructor(photo);
+
+        // src photo is the profile photo, tar is the photo that need to assign viewer ids
+        for (Photo srcPhoto : userProfilePhotos) {
+            Image sourceImage = awsImageConstructor(srcPhoto);
+            CompareFacesRequest request = new CompareFacesRequest()
+                                            .withSourceImage(sourceImage)
+                                            .withTargetImage(targetImage)
+                                            .withSimilarityThreshold(similarityThreshold);
+
+            try {
+                CompareFacesResult result = this.rekoclient.compareFaces(request);
+                List<CompareFacesMatch> facesMatches = result.getFaceMatches();
+                if (facesMatches.size() == 0) {
+                    continue;
+                } else {
+                    System.out.println("Face Matched");
+                    photoService.assignViewerOnPhotoById(photo, srcPhoto.getOwnerId());
+                }
+            } catch (Exception e) {
+                System.out.println(e.getStackTrace());
+            }
+
+        }
+
+
+    }
+
+
+
+    // return an AWS Image object
+    public Image awsImageConstructor(Photo photo) {
+        String targetPhotoBucket = photo.getAddress().getAddressBucket();
+        String targetPhotoKey = photo.getAddress().getAddressKey();
+
+        Image img = new Image().withS3Object(new S3Object()
+                                        .withBucket(targetPhotoBucket)
+                                        .withName(targetPhotoKey));
+        return img;
     }
 
     // For testing, not to be used in production
