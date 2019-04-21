@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class PhotoIsNullAdvice {
     @ResponseBody
     @ExceptionHandler(PhotoIsNullException.class)
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public String photoNotFoundHandler(PhotoIsNullException ex){
         return ex.getMessage();
     }

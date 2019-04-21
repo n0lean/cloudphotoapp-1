@@ -58,31 +58,31 @@ public class PhotoTest {
         DBTestUtil.createExampleTable(amazonDynamoDB, dynamoDB, tableName, tableClass);
     }
 
-    @Test
-    public void testGetPhotobyId() throws URISyntaxException {
-        TestRestTemplate restTemplate = new TestRestTemplate();
-
-        UUID uuid = UUID.randomUUID();
-        String uuid_str = uuid.toString();
-        final String baseurl = createURLWithPort("/photos/"+uuid_str);
-
-        URI uri = new URI(baseurl);
-
-        Photo testPhoto = new PhotoBuilder()
-                .photoId(uuid_str)
-                .photoAddress("01010101")
-                .ownerId("huxin")
-                .addOneTripId("MYC")
-                .addOneViewerId("anda")
-                .buildPhoto();
-
-        repo.save(testPhoto);
-
-        ResponseEntity<Photo> result = restTemplate.getForEntity(uri,Photo.class);
-        assertEquals(200, result.getStatusCodeValue());
-        assertEquals(testPhoto.getOwnerId(), result.getBody().getOwnerId());
-
-    }
+//    @Test
+//    public void testGetPhotobyId() throws URISyntaxException {
+//        TestRestTemplate restTemplate = new TestRestTemplate();
+//
+//        UUID uuid = UUID.randomUUID();
+//        String uuid_str = uuid.toString();
+//        String huxin = "huxin";
+//        final String baseurl = createURLWithPort("/photos/findOne/"+huxin+"/"+uuid_str);
+//
+//        URI uri = new URI(baseurl);
+//
+//        Photo testPhoto = new PhotoBuilder()
+//                .photoId(uuid_str)
+//                .photoKey("01010101")
+//                .ownerId(huxin)
+//                .tripId("MYC")
+//                .addViewerId("anda")
+//                .buildPhoto();
+//
+//        repo.save(testPhoto);
+//        ResponseEntity<Photo> result = restTemplate.getForEntity(uri, Photo.class);
+//        assertEquals(200, result.getStatusCodeValue());
+//        assertEquals(testPhoto.getOwnerId(), result.getBody().getOwnerId());
+//
+//    }
 
     @Test
     public void testAddPhoto() throws URISyntaxException {
@@ -96,17 +96,18 @@ public class PhotoTest {
 
         Photo testPhoto = new PhotoBuilder()
                 .photoId(uuid_str)
-                .photoAddress("03030303")
+                .photoKey("03030303")
                 .ownerId("oliver")
-                .addOneTripId("MYC")
-                .addOneViewerId("anda")
+                .tripId("MYC")
+                .addViewerId("anda")
                 .buildPhoto();
 
         ResponseEntity<Photo> result = restTemplate.postForEntity(uri,testPhoto, Photo.class);
         Photo getPhoto = repo.findById(uuid_str).get();
         assertEquals(201, result.getStatusCodeValue());
         assertEquals(testPhoto.getOwnerId(), result.getBody().getOwnerId());
-        assertEquals(getPhoto.getAddress(),result.getBody().getAddress());
+        assertEquals(getPhoto.getPhotoKey(),result.getBody().getPhotoKey());
+        assertEquals(getPhoto.getBucketName(),result.getBody().getBucketName());
 
     }
 
@@ -122,10 +123,10 @@ public class PhotoTest {
 
         Photo testPhoto = new PhotoBuilder()
                 .photoId(uuid_str)
-                .photoAddress("01010101")
+                .photoKey("01010101")
                 .ownerId("huxin")
-                .addOneTripId("MYC")
-                .addOneViewerId("anda")
+                .tripId("MYC")
+                .addViewerId("anda")
                 .buildPhoto();
 
         repo.save(testPhoto);
