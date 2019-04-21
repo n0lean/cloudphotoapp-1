@@ -19,8 +19,7 @@ public class Photo {
     private String id;
     private String ownerId;
 
-    //TODO: Change type to S3Address
-    private String address;
+    private S3Address address;
 
     private Set<String> viewersId;
 
@@ -40,7 +39,7 @@ public class Photo {
         this.tripsId = new HashSet<>(Arrays.asList("NULL"));
     }
 
-    public Photo(String id, String ownerId, String address){
+    public Photo(String id, String ownerId, S3Address address){
         this.id = id;
         this.ownerId = ownerId;
         this.address = address;
@@ -60,11 +59,12 @@ public class Photo {
 
 
     @DynamoDBAttribute(attributeName = "Address")
-    public String getAddress(){
+    public S3Address getAddress(){
         return address;
     }
 
-    public void setAddress(String address){
+    //TODO: Maybe need to change
+    public void setAddress(S3Address address){
         this.address = address;
     }
 

@@ -93,29 +93,29 @@ public class PhotoDistributionService {
         return img;
     }
 
+
     // For testing, not to be used in production
-//    public String compareFacesInImages(Photo photo1, Photo photo2) {
-//        String photoName1 = "testkey2";
-//        String photoName2 = "testkey";
-//        String photoBucketName = "anda-bucket-cloudphoto-app";
-//
-//        CompareFacesRequest request = new CompareFacesRequest()
-//                                            .withSourceImage(new Image()
-//                                            .withS3Object(new S3Object()
-//                                            .withBucket(photoBucketName).withName(photoName1)))
-//                                            .withTargetImage(new Image()
-//                                            .withS3Object(new S3Object()
-//                                            .withBucket(photoBucketName).withName(photoName2)));
-//
-//        CompareFacesResult result = this.rekoclient.compareFaces(request);
-//
-//        List<CompareFacesMatch> faceDetails = result.getFaceMatches();
-//
-//        for (CompareFacesMatch match : faceDetails) {
-//            ComparedFace face = match.getFace();
-//
-//        }
-//    }
+    public String compareFacesInImages(String photoName1, String photoName2) {
+
+        String photoBucketName = "anda-bucket-cloudphoto-app";
+
+        CompareFacesRequest request = new CompareFacesRequest()
+                                            .withSourceImage(new Image()
+                                            .withS3Object(new S3Object()
+                                            .withBucket(photoBucketName).withName(photoName1)))
+                                            .withTargetImage(new Image()
+                                            .withS3Object(new S3Object()
+                                            .withBucket(photoBucketName).withName(photoName2)));
+
+        CompareFacesResult result = this.rekoclient.compareFaces(request);
+
+        List<CompareFacesMatch> faceDetails = result.getFaceMatches();
+        if (faceDetails.size() >0) {
+            return "Matched";
+        } else {
+            return "Not Matched";
+        }
+    }
 
 
 
