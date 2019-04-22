@@ -8,5 +8,4 @@ import org.springframework.stereotype.Repository;
 @Repository
 @EnableScan
 public interface TripRepository extends CrudRepository<Trip, String> {
-
 }

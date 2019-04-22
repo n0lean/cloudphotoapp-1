@@ -8,7 +8,9 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Email;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @DynamoDBTable(tableName = "User")
 public class User {
@@ -25,7 +27,7 @@ public class User {
     @Email
     private String email;
 
-    private List<User> friends;
+    private Set<User> friends;
 
     @NotNull
     private S3Address profilePhotoAddress;
@@ -39,7 +41,7 @@ public class User {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.friends = new ArrayList<>();
+        this.friends = new HashSet<>();
         this.profilePhotoAddress = profilePhotoAddress;
     }
 

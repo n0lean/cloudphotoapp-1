@@ -22,7 +22,6 @@ public class PhotoController {
 
     final PhotosRepository repository;
 
-
     public boolean checkIsNull(Photo photo){
         if(photo.getId().isEmpty() || photo.getOwnerId().isEmpty()
                 ||photo.getTripId().isEmpty() || photo.getPhotoKey().isEmpty()){
