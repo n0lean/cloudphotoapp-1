@@ -22,7 +22,6 @@ public class PhotoController {
 
     final PhotosRepository repository;
 
-
     public boolean checkIsNull(Photo photo){
         if(photo.getId().isEmpty() || photo.getOwnerId().isEmpty()
                 ||photo.getTripId().isEmpty() || photo.getPhotoKey().isEmpty()){
@@ -60,23 +59,7 @@ public class PhotoController {
         }
     }
 
-//    //photos/findOne?id=XXX&userId=XXXX
-//    @RequestMapping(value = "/findOne/{userId}/{photoId}", method = RequestMethod.GET)
-//    public ResponseEntity<?> getPhoto(@PathVariable("userId") String userId,
-//                                      @PathVariable("photoId") String photoId) {
-//        try{
-//            Photo photo = repository.findById(photoId).orElseThrow(()-> new PhotoNotFoundException(photoId));
-//            if(!photo.isViewerValid(userId)){
-//                throw new PhotoNotFoundException(photoId);
-//            }
-//            return new ResponseEntity<>(photo, HttpStatus.OK);
-//        }catch (Exception e){
-//            return ResponseEntity.badRequest().body(e.toString());
-//        }
-//    }
 
-
-    //photos/findOne?id=XXX&userId=XXXX
     @RequestMapping(value = "/findOne/{userId}/{photoId}", method = RequestMethod.GET)
     public ResponseEntity<?> getPhoto(@PathVariable("userId") String userId,
                                       @PathVariable("photoId") String photoId) {
@@ -105,17 +88,16 @@ public class PhotoController {
     }
 
     //photo/findAll?userId=XXX
-    @RequestMapping(value = "/findAll/{userId}", method = RequestMethod.GET)
-    public ResponseEntity<?> findAll(@PathVariable("userId") String userId){
+    @RequestMapping(value = "/findAll/{userId}/{tripId}", method = RequestMethod.GET)
+    public ResponseEntity<?> findAll(@PathVariable("userId") String userId,
+                                     @PathVariable("tripId") String tripId){
         try {
-
             String res = "";
             Iterable<Photo> photos = repository.findAll();
             for(Photo photo:photos){
                 res += photo.toString() + "<br>";
             }
 
-            //to do : add Elastic Search module
 
             return new ResponseEntity<>(res, HttpStatus.OK);
         }catch (Exception e){

@@ -19,4 +19,11 @@ public class S3Address {
     public String getAddressKey() { return this.addressKey; }
     public String getAddressBucket() { return this.addressBucket; }
 
+    public void setAddressKey(String addressKey) {
+        this.addressKey = addressKey;
+    }
+
+    public void setAddressBucket(String addressBucket) {
+        this.addressBucket = addressBucket;
+    }
 }
