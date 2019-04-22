@@ -13,7 +13,6 @@ public class S3Address {
 
     public S3Address () { }
 
-    }
 
     public S3Address (String addressBucket, String addressKey) {
         this.addressKey = addressKey;
