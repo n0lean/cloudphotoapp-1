@@ -9,6 +9,8 @@ public class S3Address {
     private String addressKey;
     private String addressBucket;
 
+    public S3Address () { }
+
     public S3Address (String addressBucket, String addressKey) {
         this.addressKey = addressKey;
         this.addressBucket = addressBucket;
