@@ -4,7 +4,6 @@ package com.clou.photoshare.model;
 import org.springframework.stereotype.Component;
 
 
-// function signiture only, @Hu Xin
 public class S3Address {
     private String addressKey;
     private String addressBucket;
@@ -12,7 +11,7 @@ public class S3Address {
     public S3Address(){
 
     }
-    
+
     public S3Address (String addressBucket, String addressKey) {
         this.addressKey = addressKey;
         this.addressBucket = addressBucket;
