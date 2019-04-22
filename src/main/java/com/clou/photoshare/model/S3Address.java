@@ -5,13 +5,14 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConverter;
 import org.springframework.stereotype.Component;
 
 
-// function signiture only, @Hu Xin
 @Component
+
 public class S3Address {
     private String addressKey;
     private String addressBucket;
 
     public S3Address () { }
+
 
     public S3Address (String addressBucket, String addressKey) {
         this.addressKey = addressKey;
