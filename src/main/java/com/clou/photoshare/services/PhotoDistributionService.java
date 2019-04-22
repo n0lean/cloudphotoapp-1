@@ -11,11 +11,12 @@ import io.swagger.annotations.AuthorizationScope;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import javax.print.attribute.standard.Compression;
 import java.util.List;
 
-@Component
+@Service
 public class PhotoDistributionService {
 
     @Autowired
@@ -74,7 +75,6 @@ public class PhotoDistributionService {
             } catch (Exception e) {
                 System.out.println(e.getStackTrace());
             }
-
         }
 
 

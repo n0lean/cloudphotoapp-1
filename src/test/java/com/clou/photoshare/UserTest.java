@@ -14,6 +14,7 @@ import javax.validation.ValidatorFactory;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.clou.photoshare.controller.UserController;
+import com.clou.photoshare.model.S3Address;
 import com.clou.photoshare.model.User;
 import com.clou.photoshare.model.UserBuilder;
 import com.clou.photoshare.repository.UserRepository;
@@ -88,9 +89,11 @@ public class UserTest {
 
     @Test
     public void idIsNull() {
+        S3Address address = new S3Address("Bucketname", "Key");
         User user = new UserBuilder()
                 .id(null)
                 .email("123@ab.com")
+                .profilePhotoAddress(address)
                 .buildUser();
 
         Set<ConstraintViolation<User>> constraintViolations = validator.validateProperty(user, "id");
@@ -99,9 +102,11 @@ public class UserTest {
 
     @Test
     public void isValidEmail() {
+        S3Address address = new S3Address("Bucketname", "Key");
         User user = new UserBuilder()
                 .id("123")
                 .email("12om")
+                .profilePhotoAddress(address)
                 .buildUser();
 
         Set<ConstraintViolation<User>> constraintViolations = validator.validateProperty(user, "email");
@@ -135,12 +140,14 @@ public class UserTest {
 
         URI uri = new URI(baseurl);
 
+        S3Address address = new S3Address("Bucketname", "Key");
         User testUser = new UserBuilder()
                 .email("test@me.com")
                 .id(uuid_str)
                 .lastName("test")
                 .firstName("before")
                 .nickName("nicname")
+                .profilePhotoAddress(address)
                 .buildUser();
 
         repo.save(testUser);
@@ -155,6 +162,32 @@ public class UserTest {
         User newUser = repo.findById(testUser.getId()).get();
         assertEquals(201, res2.getStatusCodeValue());
         assertEquals("after", newUser.getFirstName());
+    }
+
+    @Test
+    public void testSearchUserByEmail() throws URISyntaxException {
+        TestRestTemplate restTemplate = new TestRestTemplate();
+
+        UUID uuid = java.util.UUID.randomUUID();
+        String uuid_str = uuid.toString();
+        final String baseurl = createURLWithPort("/users/search?email=test@me.com");
+
+        URI uri = new URI(baseurl);
+
+        S3Address address = new S3Address("Bucketname", "Key");
+        User testUser = new UserBuilder()
+                .email("test@me.com")
+                .id(uuid_str)
+                .lastName("test")
+                .firstName("before")
+                .nickName("nicname")
+                .profilePhotoAddress(address)
+                .buildUser();
+
+        repo.save(testUser);
+
+        ResponseEntity<User> res = restTemplate.getForEntity(uri, User.class);
+        assertEquals(200, res.getStatusCodeValue());
     }
 
     private static CreateTableResult createTable(AmazonDynamoDB ddb, String tableName, String hashKeyName) {

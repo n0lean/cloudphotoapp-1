@@ -92,6 +92,7 @@ public class UserDBTest {
 
     @Test
     public void findByIdTest() {
+
         UUID uuid = UUID.randomUUID();
         String uuid_str = uuid.toString();
         User testUser = new UserBuilder()

@@ -1,6 +1,7 @@
 package com.clou.photoshare.controller;
 
 import com.clou.photoshare.model.UserBuilder;
+import com.clou.photoshare.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import com.clou.photoshare.model.User;
 import com.clou.photoshare.repository.UserRepository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.OptionalInt;
 
@@ -18,10 +20,12 @@ import java.util.OptionalInt;
 public class UserController {
 
     private final UserRepository repository;
+    private final UserService userService;
 
     @Autowired
-    public UserController(UserRepository repo) {
+    public UserController(UserRepository repo, UserService userService) {
         this.repository = repo;
+        this.userService = userService;
     }
 
 
@@ -56,6 +60,20 @@ public class UserController {
                 return ResponseEntity.notFound().build();
             }
 
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.toString());
+        }
+    }
+
+    @RequestMapping(value = "/search", method = RequestMethod.GET)
+    public ResponseEntity<?> searchUserByEmail(@RequestParam("email") String email) {
+        try {
+            List<User> result = repository.findDistinctByEmail(email);
+            if (result.size() > 0) {
+                return new ResponseEntity<>(result.get(0), HttpStatus.OK);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.toString());
         }
