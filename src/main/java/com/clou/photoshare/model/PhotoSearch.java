@@ -6,6 +6,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBRangeKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.data.annotation.Id;
 
 import javax.validation.constraints.NotNull;
 import java.util.Collection;
@@ -25,7 +26,6 @@ public class PhotoSearch {
     private Set<String> photosId;
 
     public PhotoSearch(){
-        this.photosId = new HashSet<>();
     }
 
     public PhotoSearch(String userId, String tripId){
@@ -34,7 +34,10 @@ public class PhotoSearch {
         this.userId = userId;
     }
 
-    @DynamoDBHashKey(attributeName = "UserId")
+    @Id
+    private PhotoSearchId photoSearchId;
+
+    @DynamoDBHashKey(attributeName = "Id")
     public String getUserId() {
         return userId;
     }
