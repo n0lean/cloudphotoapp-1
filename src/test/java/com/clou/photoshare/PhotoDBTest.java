@@ -57,12 +57,10 @@ public class PhotoDBTest {
         uuids.add(uuid_str);
         Photo testPhoto = new PhotoBuilder()
                 .photoId(uuid_str)
-                .photoKey("01010101")
-                .ownerId("huxin")
                 .tripId("MYC")
-                .addViewerId("anda")
-                .addViewerId("zhengzhi")
-                .addViewerId("pengyu")
+                .photoKey("01010101")
+                .bucketName("hay")
+                .ownerId("huxin")
                 .buildPhoto();
 
         repo.save(testPhoto);
@@ -72,11 +70,7 @@ public class PhotoDBTest {
         assertEquals(testPhoto.getPhotoKey(), result.getPhotoKey());
         assertEquals(testPhoto.getOwnerId(), result.getOwnerId());
         assertEquals(testPhoto.getTripId(), result.getTripId());
-        assertEquals(testPhoto.getViewersId(),result.getViewersId());
-        for (String s : result.getViewersId()) {
-            assertTrue(testPhoto.getViewersId().contains(s));
-        }
-
+        assertEquals(testPhoto.getBucketName(),result.getBucketName());
 
     }
 
