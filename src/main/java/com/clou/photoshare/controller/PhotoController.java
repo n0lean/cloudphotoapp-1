@@ -24,7 +24,7 @@ public class PhotoController {
 
     public boolean checkIsNull(Photo photo){
         if(photo.getId().isEmpty() || photo.getOwnerId().isEmpty()
-                ||photo.getTripId().isEmpty() || photo.getPhotoKey().isEmpty()){
+                ||photo.getTripId().isEmpty() || photo.getPhotoKey().isEmpty() || photo.getBucketName().isEmpty()){
             return false;
         }
         return true;
@@ -44,11 +44,10 @@ public class PhotoController {
             Photo newPhoto = new PhotoBuilder()
                     .photoId(photo.getId())
                     .ownerId(photo.getOwnerId())
-                    .photoKey(photo.getPhotoKey())
                     .tripId(photo.getTripId())
-                    .addViewerId(photo.getViewersId())
+                    .photoKey(photo.getPhotoKey())
+                    .bucketName(photo.getBucketName())
                     .buildPhoto();
-            newPhoto.addViewerId(newPhoto.getOwnerId());
             repository.save(newPhoto);
 
             //add trigger API
@@ -65,27 +64,13 @@ public class PhotoController {
                                       @PathVariable("photoId") String photoId) {
         try{
             Photo photo = repository.findById(photoId).orElseThrow(()-> new PhotoNotFoundException(photoId));
-            if(!photo.isViewerValid(userId)){
-                throw new PhotoNotFoundException(photoId);
-            }
+
             return new ResponseEntity<>(photo, HttpStatus.OK);
         }catch (Exception e){
             return ResponseEntity.badRequest().body(e.toString());
         }
     }
 
-
-    @RequestMapping(value = "/testsave",method = RequestMethod.GET)
-    public String testsave(){
-        Set<String> viewIds = new HashSet<>( Arrays.asList("anDa","huxin"));
-        String tripsId = "LA";
-        UUID uuid = UUID.randomUUID();
-        String photoKey = uuid.toString();
-        Photo test = new Photo("ss", "10101",photoKey,tripsId);
-        test.setViewersId(viewIds);
-        repository.save(test);
-        return "test Done";
-    }
 
     //photo/findAll?userId=XXX
     @RequestMapping(value = "/findAll/{userId}/{tripId}", method = RequestMethod.GET)

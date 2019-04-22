@@ -98,8 +98,8 @@ public class PhotoTest {
                 .photoId(uuid_str)
                 .photoKey("03030303")
                 .ownerId("oliver")
+                .bucketName("hay")
                 .tripId("MYC")
-                .addViewerId("anda")
                 .buildPhoto();
 
         ResponseEntity<Photo> result = restTemplate.postForEntity(uri,testPhoto, Photo.class);
@@ -125,8 +125,8 @@ public class PhotoTest {
                 .photoId(uuid_str)
                 .photoKey("01010101")
                 .ownerId("huxin")
+                .bucketName("hay")
                 .tripId("MYC")
-                .addViewerId("anda")
                 .buildPhoto();
 
         repo.save(testPhoto);
