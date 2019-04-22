@@ -3,6 +3,8 @@ package com.clou.photoshare.model;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 
 
 import javax.validation.constraints.NotNull;
@@ -10,39 +12,43 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @DynamoDBTable(tableName = "Photo")
+@PropertySource("classpath:application.properties")
 public class Photo {
+
+    private String bucketName;
 
     @NotNull
     private String id;
+    @NotNull
     private String ownerId;
-
-    private String address;
+    @NotNull
+    private String photoKey;
+    @NotNull
+    private String tripId;
 
     private Set<String> viewersId;
-    private Set<String> tripsId;
 
 
     public Photo(){
-        this.viewersId = new HashSet<>(Arrays.asList("NULL"));
-        this.tripsId = new HashSet<>(Arrays.asList("NULL"));
+        this.viewersId = new HashSet<>();
     }
 
-    public Photo(String id, String ownerId){
+    public Photo(String id, String ownerId, String photoKey, String tripId){
         this.id = id;
         this.ownerId = ownerId;
-        this.viewersId = new HashSet<>(Arrays.asList("NULL"));
-        this.tripsId = new HashSet<>(Arrays.asList("NULL"));
+        this.photoKey = photoKey;
+        this.tripId = tripId;
+        this.viewersId = new HashSet<>();
     }
 
-    public Photo(String id, String ownerId, String address){
+    public Photo(String id, String ownerId, String photoKey, String tripId, Set<String> viewersId){
         this.id = id;
         this.ownerId = ownerId;
-        this.address = address;
-        this.viewersId = new HashSet<>(Arrays.asList("NULL"));
-        this.tripsId = new HashSet<>(Arrays.asList("NULL"));
+        this.photoKey = photoKey;
+        this.tripId = tripId;
+        this.viewersId = viewersId;
     }
 
 
@@ -56,13 +62,13 @@ public class Photo {
     }
 
 
-    @DynamoDBAttribute(attributeName = "Address")
-    public String getAddress(){
-        return address;
+    @DynamoDBAttribute(attributeName = "PhotoKey")
+    public String getPhotoKey(){
+        return photoKey;
     }
 
-    public void setAddress(String address){
-        this.address = address;
+    public void setPhotoKey(String photoKey){
+        this.photoKey = photoKey;
     }
 
     @DynamoDBAttribute(attributeName = "OwnerId")
@@ -78,65 +84,54 @@ public class Photo {
 
     @DynamoDBAttribute(attributeName = "ViewersId")
     public Set<String> getViewersId(){
-        if(this.viewersId == null || this.viewersId.size() == 0){
-            this.viewersId = new HashSet<>();
-            return this.viewersId;
-        }
 
         return this.viewersId;
     }
 
     public void setViewersId( Set<String> viewersId){
-        if(this.viewersId.contains("NULL")){
-            this.viewersId.remove("NULL");
-        }
-        this.viewersId.addAll(viewersId);
+        this.viewersId = viewersId;
     }
 
-    public void addOneViewerId( String viewerId ){
-        if(this.viewersId.contains("NULL")){
-            this.viewersId.remove("NULL");
-        }
+    public void addViewerId( String viewerId ){
         this.viewersId.add(viewerId);
     }
-
-    @DynamoDBAttribute(attributeName = "TripsId")
-    public Set<String> getTripsId(){
-        if(this.tripsId == null || this.tripsId.size() == 0){
-            this.tripsId = new HashSet<>();
-            return this.tripsId;
-        }
-
-        return this.tripsId;
+    public void addViewerId( Collection<String> viewerId ){
+        this.viewersId.addAll(viewerId);
     }
 
-    public void setTripsId(Set<String> tripsId){
-        if(this.tripsId.contains("NULL")){
-            this.tripsId.remove("NULL");
-        }
-        this.tripsId.addAll(tripsId);
+    @DynamoDBAttribute(attributeName = "TripId")
+    public String getTripId(){
+        return this.tripId;
     }
 
-
-    public void addOneTripId(String tripId){
-        if(this.tripsId.contains("NULL")){
-            this.tripsId.remove("NULL");
-        }
-        this.tripsId.add(tripId);
+    public void setTripId(String tripsId){
+        this.tripId = tripId;
     }
 
+    @DynamoDBAttribute(attributeName = "BucketName")
+    public String getBucketName() {
+        return bucketName;
+    }
+
+    public void setBucketName(String bucketName) {
+        this.bucketName = bucketName;
+    }
+
+    public boolean isViewerValid(String userId){
+        if(this.viewersId.contains(userId)){
+            return true;
+        }else{
+            return false;
+        }
+    }
 
     @Override
     public String toString(){
         String joinedViewersId = "NULL";
-        String joinedTripsId = "NULL";
         if(this.viewersId.size() != 0){
             joinedViewersId = String.join(",",this.viewersId);
         }
-        if(this.tripsId.size() != 0) {
-            joinedTripsId = String.join(",", this.tripsId);
-        }
-        return String.format("Photo[id='%s', address='%s', OwnerId='%s',ViewersId='%s', tripsId='%s']",id, address, ownerId,joinedViewersId, joinedTripsId);
+        return String.format("Photo[id='%s', address='%s', OwnerId='%s',ViewersId='%s', tripsId='%s']",id, photoKey, ownerId,joinedViewersId,tripId);
     }
 
 }

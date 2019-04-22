@@ -1,26 +1,30 @@
 package com.clou.photoshare.model;
 
+import org.springframework.beans.factory.annotation.Value;
+
 import java.util.*;
 
 
 public class PhotoBuilder {
+
     private String _id;
-    private String _address;
+    private String _photoKey;
     private String _owenerId;
+    private String _tripsId;
+
+    private String _bucketName = "cloudphoto-hay";
+
     private Set<String> _viewersId = new HashSet<>();
-    private Set<String> _tripsId = new HashSet<>();
 
     public PhotoBuilder(){
     }
 
     public Photo buildPhoto() {
-        Photo ph = new Photo(this._id, this._owenerId, this._address);
-        if(this._viewersId.size() != 0) {
+        Photo ph = new Photo(this._id, this._owenerId, this._photoKey, this._tripsId);
+        if(this._viewersId.size() != 0){
             ph.setViewersId(this._viewersId);
         }
-        if(this._tripsId.size() != 0) {
-            ph.setTripsId(this._tripsId);
-        }
+        ph.setBucketName(this._bucketName);
         return ph;
     }
 
@@ -29,12 +33,12 @@ public class PhotoBuilder {
         return this;
     }
 
-    public PhotoBuilder photoAddress(String addr){
-        this._address = addr;
+    public PhotoBuilder photoKey(String photoKey){
+        this._photoKey = photoKey;
         return this;
     }
 
-    public PhotoBuilder addOwnerId(String ownerId){
+    public PhotoBuilder ownerId(String ownerId){
         this._owenerId = ownerId;
         return this;
     }
@@ -44,18 +48,13 @@ public class PhotoBuilder {
         return this;
     }
 
-    public PhotoBuilder addOneViewerId(String viewersId){
+    public PhotoBuilder addViewerId(String viewersId){
         this._viewersId.add(viewersId);
         return this;
     }
 
-    public PhotoBuilder addTripId(Collection<String> tripsId){
-        this._tripsId.addAll(tripsId);
-        return this;
-    }
-
-    public PhotoBuilder addOneTripId(String tripsId){
-        this._tripsId.add(tripsId);
+    public PhotoBuilder tripId(String tripId){
+        this._tripsId = tripId;
         return this;
     }
 }

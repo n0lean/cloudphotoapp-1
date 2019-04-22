@@ -153,6 +153,7 @@
     <orderEntry type="library" name="Maven: javax.el:javax.el-api:3.0.0" level="project" />
     <orderEntry type="library" name="Maven: javax.interceptor:javax.interceptor-api:1.2" level="project" />
     <orderEntry type="library" name="Maven: javax.inject:javax.inject:1" level="project" />
+    <orderEntry type="library" name="Maven: com.amazonaws:aws-java-sdk-rekognition:1.11.163" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: com.adobe.testing:s3mock-junit4:2.1.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: com.adobe.testing:s3mock-testsupport-common:2.1.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: com.adobe.testing:s3mock:2.1.0" level="project" />

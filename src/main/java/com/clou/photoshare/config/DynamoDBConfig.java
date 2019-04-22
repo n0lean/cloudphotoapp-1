@@ -29,13 +29,13 @@ public class DynamoDBConfig {
     @Value("${DYNAMODB_ENDPOINT}")
     private String dBEndpoint;
 
-    @Value("${DYNAMODB_REGION}")
+    @Value("${aws.region}")
     private String region;
 
-    @Value("${AWS_ACCESS_KEY}")
+    @Value("${aws.access.key.id}")
     private String accessKey;
 
-    @Value("${AWS_ACCESS_KEY_ID}")
+    @Value("${aws.access.key.secret}")
     private String secretKey;
 
     public AWSCredentialsProvider amazonAWSCredentialsProvider() {

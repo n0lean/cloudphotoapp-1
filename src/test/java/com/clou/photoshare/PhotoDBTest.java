@@ -57,31 +57,26 @@ public class PhotoDBTest {
         uuids.add(uuid_str);
         Photo testPhoto = new PhotoBuilder()
                 .photoId(uuid_str)
-                .photoAddress("01010101")
-                .addOwnerId("huxin")
-                .addOneTripId("MYC")
-                .addOneTripId("LA")
-                .addOneViewerId("anda")
-                .addOneViewerId("zhengzhi")
-                .addOneViewerId("pengyu")
+                .photoKey("01010101")
+                .ownerId("huxin")
+                .tripId("MYC")
+                .addViewerId("anda")
+                .addViewerId("zhengzhi")
+                .addViewerId("pengyu")
                 .buildPhoto();
 
         repo.save(testPhoto);
 
         Photo result = repo.findById(uuid_str).get();
         assertEquals(testPhoto.getId(), result.getId());
-        assertEquals(testPhoto.getAddress(), result.getAddress());
+        assertEquals(testPhoto.getPhotoKey(), result.getPhotoKey());
         assertEquals(testPhoto.getOwnerId(), result.getOwnerId());
-        assertEquals(testPhoto.getTripsId(), result.getTripsId());
+        assertEquals(testPhoto.getTripId(), result.getTripId());
         assertEquals(testPhoto.getViewersId(),result.getViewersId());
-        assertEquals(testPhoto.toString(),result.toString());
         for (String s : result.getViewersId()) {
             assertTrue(testPhoto.getViewersId().contains(s));
         }
 
-        for (String s : result.getTripsId()) {
-            assertTrue(testPhoto.getTripsId().contains(s));
-        }
 
     }
 

@@ -7,11 +7,12 @@ public class UserBuilder {
     private String _firstName = "";
     private String _lastName = "";
     private String _email;
+    private S3Address _address;
 
     public UserBuilder() {  }
 
     public User buildUser() {
-        return new User(this._id, this._nickName, this._firstName, this._lastName, this._email);
+        return new User(this._id, this._nickName, this._firstName, this._lastName, this._email, this._address);
     }
 
     public UserBuilder id(String _id) {
@@ -36,6 +37,11 @@ public class UserBuilder {
 
     public UserBuilder email(String _email) {
         this._email = _email;
+        return this;
+    }
+
+    public UserBuilder profilePhotoAddress(S3Address _address) {
+        this._address = _address;
         return this;
     }
 }

@@ -27,16 +27,20 @@ public class User {
 
     private List<User> friends;
 
+    @NotNull
+    private S3Address profilePhotoAddress;
+
     // have a empty consturctor so we can constrcut object from DB
     public User () {}
 
-    public User(String id, String nickName, String firstName, String lastName, String email) {
+    public User(String id, String nickName, String firstName, String lastName, String email, S3Address profilePhotoAddress) {
         this.id = id;
         this.nickName = nickName;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.friends = new ArrayList<>();
+        this.profilePhotoAddress = profilePhotoAddress;
     }
 
     @DynamoDBHashKey(attributeName = "Id")
@@ -80,6 +84,20 @@ public class User {
     public List<User> getFriends() { return friends; }
 
     public void setFriends(List<User> firends) { this.friends = friends; }
+
+    @DynamoDBAttribute(attributeName = "AddressKey")
+    public String getAddressKey() {
+        return this.profilePhotoAddress.getAddressKey();
+    }
+
+    @DynamoDBAttribute(attributeName = "AddressBucket")
+    public String getAddressBucket () {
+        return this.profilePhotoAddress.getAddressBucket();
+    }
+
+    public void setProfilePhotoAddress(S3Address newAddress) {
+        this.profilePhotoAddress = newAddress;
+    }
 
     @Override
     public String toString() {
