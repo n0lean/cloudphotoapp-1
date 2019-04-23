@@ -8,7 +8,7 @@ public class PhotoSearchBuilder {
     private String _tripId;
     private Set<String> _photosId;
 
-    PhotoSearchBuilder(){
+    public PhotoSearchBuilder(){
 
     }
 
