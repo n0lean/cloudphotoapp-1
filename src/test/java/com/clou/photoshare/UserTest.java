@@ -14,6 +14,7 @@ import javax.validation.ValidatorFactory;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.clou.photoshare.controller.UserController;
+import com.clou.photoshare.errorHandler.InvalidArgumentException;
 import com.clou.photoshare.model.S3Address;
 import com.clou.photoshare.model.User;
 import com.clou.photoshare.model.UserBuilder;
@@ -87,7 +88,7 @@ public class UserTest {
         DBTestUtil.createExampleTable(amazonDynamoDB,  dynamoDB, tableName, tableClass);
     }
 
-    @Test
+    @Test(expected = InvalidArgumentException.class)
     public void idIsNull() {
         S3Address address = new S3Address("Bucketname", "Key");
         User user = new UserBuilder()
@@ -96,9 +97,6 @@ public class UserTest {
                 .profilePhotoAddress(address)
                 .nickName("nickname")
                 .buildUser();
-
-        Set<ConstraintViolation<User>> constraintViolations = validator.validateProperty(user, "id");
-        assertEquals(1, constraintViolations.size());
     }
 
     @Test
