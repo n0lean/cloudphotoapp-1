@@ -25,6 +25,7 @@ public class PhotoController {
 
     private final PhotosRepository repository;
     private final PhotoService photoService;
+    private final PhotoDistributionService photoDistributionService;
 
     public boolean checkIsNull(Photo photo){
         if(photo.getId().isEmpty() || photo.getOwnerId().isEmpty()
@@ -35,10 +36,10 @@ public class PhotoController {
     }
 
     @Autowired
-    public PhotoController(PhotosRepository repo ,PhotoService service){
-
+    public PhotoController(PhotosRepository repo, PhotoService service, PhotoDistributionService distService){
         this.repository = repo;
         this.photoService = service;
+        this.photoDistributionService = distService;
     }
 
     @RequestMapping(value = "/new", method = RequestMethod.POST)
@@ -114,16 +115,15 @@ public class PhotoController {
 
     @RequestMapping(value = "/testface", method = RequestMethod.GET)
     public String testFace() {
-        PhotoDistributionService photoService = new PhotoDistributionService();
         Photo testPhoto = new PhotoBuilder()
                                 .ownerId("123")
                                 .photoKey("123")
                                 .photoId("123")
                                 .buildPhoto();
         try {
-            return photoService.getFaces(testPhoto);
+            return this.photoDistributionService.getFaces(testPhoto);
         } catch (Exception e) {
-            return "Error" + e.toString();
+            return "Error" + e.getMessage();
         }
     }
 

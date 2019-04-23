@@ -29,6 +29,7 @@ public class PhotoService {
     }
 
 
+
     //TODO: trigger function for start assignViewerId
     public void triggerAssignViewers(Photo photo) {
         photoDistributionService.assignViewer(photo);
