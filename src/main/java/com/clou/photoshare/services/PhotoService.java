@@ -17,15 +17,16 @@ import java.util.Set;
 @Service
 public class PhotoService {
 
-    @Autowired
     private PhotosRepository photosRepository;
-
-    @Autowired
     private PhotoSearchRepository photoSearchRepository;
-
-    @Autowired
     private PhotoDistributionService photoDistributionService;
 
+    @Autowired
+    public PhotoService(PhotosRepository photoRepo, PhotoSearchRepository photoSearchRepo, PhotoDistributionService distSer) {
+        this.photosRepository= photoRepo;
+        this.photoSearchRepository = photoSearchRepo;
+        this.photoDistributionService = distSer;
+    }
 
 
     //TODO: trigger function for start assignViewerId
