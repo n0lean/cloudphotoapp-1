@@ -23,6 +23,7 @@ public class Trip {
     public Trip() {  };
 
     public Trip(String id, String tripName, Set<String> tripMember) {
+
         this.id = id;
         this.tripName = tripName;
         this.tripMember = tripMember;
