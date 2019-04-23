@@ -13,6 +13,9 @@ import java.util.Set;
 
 @Repository
 @EnableScan
+/*TODO: Potential Bugs here: CurdRepository<PhotoSearch, PhotoSearchID>
+        refer to https://github.com/derjust/spring-data-dynamodb/wiki/Use-Hash-Range-keys
+*/
 public interface PhotoSearchRepository extends CrudRepository<PhotoSearch, String> {
 
     PhotoSearch findByUserIdAndTripId(String userId,  String tripId);
