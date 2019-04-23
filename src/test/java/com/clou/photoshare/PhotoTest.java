@@ -102,7 +102,7 @@ public class PhotoTest {
                 .tripId("MYC")
                 .buildPhoto();
 
-        ResponseEntity<Photo> result = restTemplate.postForEntity(uri,testPhoto, Photo.class);
+        ResponseEntity<Photo> result = restTemplate.postForEntity(uri, testPhoto, Photo.class);
         Photo getPhoto = repo.findById(uuid_str).get();
         assertEquals(201, result.getStatusCodeValue());
         assertEquals(testPhoto.getOwnerId(), result.getBody().getOwnerId());
