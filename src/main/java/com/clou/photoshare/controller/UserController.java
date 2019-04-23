@@ -1,5 +1,6 @@
 package com.clou.photoshare.controller;
 
+import com.clou.photoshare.errorHandler.UserNotFoundException;
 import com.clou.photoshare.model.FriendRequest;
 import com.clou.photoshare.model.UserBuilder;
 import com.clou.photoshare.repository.FriendRequestRepository;
@@ -104,18 +105,38 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-//    @RequestMapping(value = "/addfriend", method = RequestMethod.PUT)
-//    public ResponseEntity<?> respondFriendRequest(@RequestBody FriendRequest friendRequest) {
-//        try {
-//            String status = friendRequest.getStatus();
-//            if (status == "accepted") {
-//                this.userService.acceptFriendRequest(friendRequest);
-//            } else {
-//                this.userService.declineFriendRequest(friendRequest);
-//            }
-//            return ResponseEntity.ok().build();
-//        } catch (Exception e) {
-//            return ResponseEntity.badRequest().build();
-//        }
-//    }
+    @RequestMapping(value = "/addfriend", method = RequestMethod.PUT)
+    public ResponseEntity<?> respondFriendRequest(@RequestBody FriendRequest friendRequest) {
+        try {
+            String status = friendRequest.getStatus();
+            if (status == "accepted") {
+                this.userService.acceptFriendRequest(friendRequest);
+            } else {
+                this.userService.declineFriendRequest(friendRequest);
+            }
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @RequestMapping(value = "/friendrequestsfrom/{id}", method = RequestMethod.GET)
+    public ResponseEntity<?> getSendFriendsRequest(@PathVariable String userId) {
+        try {
+            List<FriendRequest> result = this.userService.getSendFriendRequests(userId);
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @RequestMapping(value = "/friendrequeststo/{id}", method = RequestMethod.GET)
+    public ResponseEntity<?> getReceivedFriendsRequest(@PathVariable String userId) {
+        try {
+            List<FriendRequest> result = this.userService.getReceivedFriendRequest(userId);
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
 }

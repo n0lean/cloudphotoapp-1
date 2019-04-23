@@ -9,10 +9,12 @@ import com.clou.photoshare.repository.UserRepository;
 import org.omg.CORBA.Request;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Transactional
 public class UserService {
     private final UserRepository userRepository;
     private final FriendRequestRepository friendRequestRepository;
@@ -91,5 +93,37 @@ public class UserService {
         this.friendRequestRepository.delete(friendRequest);
     }
 
+    /**
+     *
+     * @param friendRequest
+     * @throws UserNotFoundException
+     */
+    public void declineFriendRequest(FriendRequest friendRequest) throws UserNotFoundException {
+        String fromUserId = friendRequest.getFromUserId();
+        String toUserId = friendRequest.getToUserId();
+
+        User userFrom = this.userRepository.findById(fromUserId).orElseThrow(() -> new UserNotFoundException(fromUserId));
+        User userTo = this.userRepository.findById(toUserId).orElseThrow(() -> new UserNotFoundException(toUserId));
+
+        this.friendRequestRepository.delete(friendRequest);
+    }
+
+    /**
+     * Get Friends Request from this user
+     * @param userId
+     * @return List of friends request
+     */
+    public List<FriendRequest> getSendFriendRequests(String userId) {
+        return this.friendRequestRepository.findFriendRequestByFromUserId(userId);
+    }
+
+    /**
+     * Get Friend Requests send to this user
+     * @param userId
+     * @return List of friends request
+     */
+    public List<FriendRequest> getReceivedFriendRequest(String userId) {
+        return this.friendRequestRepository.findFriendRequestByToUserId(userId);
+    }
 
 }

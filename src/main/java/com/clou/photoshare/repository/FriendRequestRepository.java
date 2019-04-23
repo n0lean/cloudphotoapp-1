@@ -11,7 +11,7 @@ import java.util.List;
 
 @Repository
 @EnableScan
-public interface FriendRequestRepository extends CrudRepository<FriendRequest, String> {
+public interface FriendRequestRepository extends CrudRepository<FriendRequest, FriendRequest.FriendRequestId> {
     List<FriendRequest> findFriendRequestByFromUserId(String fromUserId);
     List<FriendRequest> findFriendRequestByToUserId(String toUserId);
 }

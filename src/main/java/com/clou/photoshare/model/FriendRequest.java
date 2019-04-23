@@ -5,17 +5,51 @@ import com.amazonaws.services.dynamodbv2.datamodeling.*;
 import com.clou.photoshare.util.FriendRequestDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.apache.kafka.common.protocol.types.Field;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.data.annotation.Id;
 
+import java.io.Serializable;
 import java.util.Date;
 
 
 @JsonDeserialize(using = FriendRequestDeserialize.class)
 @DynamoDBTable(tableName = "FriendRequest")
+@PropertySource("classpath:application.properties")
 public class FriendRequest {
     private String fromUserId;
     private String toUserId;
     private String status;
     private Date timeStamp;
+
+    public class FriendRequestId implements Serializable {
+
+        private String fromUserId;
+        private String toUserId;
+
+        @DynamoDBHashKey
+        public String getFromUserId() {
+            return this.fromUserId;
+        }
+
+        public void setFromUserId(String fromUserId) {
+            this.fromUserId = fromUserId;
+        }
+
+        @DynamoDBRangeKey
+        public String getToUserId() {
+            return this.toUserId;
+        }
+
+        public void setToUserId(String toUserId) {
+            this.toUserId =  toUserId;
+        }
+
+    }
+
+
+    @Id
+    private FriendRequestId friendRequestId;
+
 
     public FriendRequest () { }
 
@@ -28,7 +62,6 @@ public class FriendRequest {
         this.status = status;
         this.timeStamp = timeStamp;
     }
-
 
     @DynamoDBHashKey(attributeName = "FromUserId")
     @DynamoDBIndexRangeKey(attributeName = "FromUserId", globalSecondaryIndexName = "toUserIndex")

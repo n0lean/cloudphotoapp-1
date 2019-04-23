@@ -128,7 +128,6 @@ public class PhotoController {
     }
 
 
-    //TODO: a test method for compareFace using FaceDistributionService
     @RequestMapping(value = "/compareface", method = RequestMethod.GET)
     public String compareFace() {
         return "";

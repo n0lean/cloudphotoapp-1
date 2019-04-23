@@ -15,9 +15,7 @@ import javax.validation.ValidatorFactory;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.clou.photoshare.controller.UserController;
 import com.clou.photoshare.errorHandler.InvalidArgumentException;
-import com.clou.photoshare.model.S3Address;
-import com.clou.photoshare.model.User;
-import com.clou.photoshare.model.UserBuilder;
+import com.clou.photoshare.model.*;
 import com.clou.photoshare.repository.UserRepository;
 import org.junit.*;
 
@@ -45,6 +43,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = PhotoshareApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -189,6 +188,44 @@ public class UserTest {
         ResponseEntity<User> res = restTemplate.getForEntity(uri, User.class);
         assertEquals(200, res.getStatusCodeValue());
     }
+
+//    @Test
+//    public void testCreateFriendRequest() throws URISyntaxException {
+//        TestRestTemplate restTemplate = new TestRestTemplate();
+//
+//
+//        final String baseurl = createURLWithPort("/users/addfriend");
+//
+//        FriendRequest testFriendRequest = new FriendRequestBuilder()
+//                                                .fromUserId("1")
+//                                                .toUserId("2")
+//                                                .buildFriendRequest();
+//
+//        S3Address address = new S3Address("Bucketname", "Key");
+//        User testUser1 = new UserBuilder()
+//                .email("test@me.com")
+//                .id("1")
+//                .lastName("test")
+//                .firstName("before")
+//                .nickName("nicname")
+//                .profilePhotoAddress(address)
+//                .buildUser();
+//
+//        User testUser2 = new UserBuilder()
+//                .email("test@me2.com")
+//                .id("2")
+//                .lastName("test2")
+//                .firstName("before2")
+//                .nickName("nicname2")
+//                .profilePhotoAddress(address)
+//                .buildUser();
+//
+//        repo.save(testUser1);
+//        repo.save(testUser2);
+//
+//        ResponseEntity<>
+//
+//    }
 
     private static CreateTableResult createTable(AmazonDynamoDB ddb, String tableName, String hashKeyName) {
         List<AttributeDefinition> attributeDefinitions = new ArrayList<AttributeDefinition>();
