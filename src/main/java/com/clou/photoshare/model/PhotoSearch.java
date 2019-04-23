@@ -13,12 +13,8 @@ import java.util.Set;
 @DynamoDBTable(tableName = "PhotoSearch")
 @PropertySource("classpath:application.properties")
 public class PhotoSearch {
-
-    @NotNull
-    private String userId;
-
-    @NotNull
-    private String tripId;
+    @Id
+    private PhotoSearchId photoSearchId;
 
     private Set<String> photosId;
 
@@ -27,30 +23,38 @@ public class PhotoSearch {
 
     public PhotoSearch(String userId, String tripId){
         this.photosId = new HashSet<>();
-        this.tripId = tripId;
-        this.userId = userId;
+        this.photoSearchId = new PhotoSearchId();
+        this.photoSearchId.setTripId(tripId);
+        this.photoSearchId.setUserId(userId);
     }
 
-    @Id
-    private PhotoSearchId photoSearchId;
 
-    @DynamoDBHashKey(attributeName = "Id")
+    @DynamoDBHashKey(attributeName = "UserId")
     public String getUserId() {
-        return userId;
+
+        return photoSearchId != null ? photoSearchId.getUserId():null;
     }
 
     public void setUserId(String userId) {
-        this.userId = userId;
+        if(photoSearchId == null){
+            photoSearchId = new PhotoSearchId();
+        }
+        photoSearchId.setUserId(userId);
     }
 
     @DynamoDBRangeKey(attributeName = "TripId")
     @DynamoDBIndexHashKey(attributeName = "TripId",globalSecondaryIndexName="TripId_index")
     public String getTripId() {
-        return tripId;
+
+        return photoSearchId != null ? photoSearchId.getTripId():null;
+
     }
 
     public void setTripId(String tripId) {
-        this.tripId = tripId;
+        if(photoSearchId == null){
+            photoSearchId = new PhotoSearchId();
+        }
+        photoSearchId.setTripId(tripId);
     }
 
     @DynamoDBAttribute(attributeName = "PhotoId")
@@ -59,6 +63,9 @@ public class PhotoSearch {
     }
 
     public void setPhotoId(Collection<String> photoId) {
+        if(this.photosId == null){
+            this.photosId = new HashSet<String>();
+        }
         this.photosId.addAll(photoId);
     }
 
