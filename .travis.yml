@@ -24,9 +24,6 @@ branches:
   only:
   - master
 
-before_script:
-
-
 script: "mvn cobertura:cobertura"
 
 after_success:
@@ -35,6 +32,7 @@ after_success:
 
 before_deploy:
   - mvn package && zip -r ./my_source_bundle.zip target/photoshare-0.0.1-SNAPSHOT.jar
+  - python set_properties.py
 
 deploy:
   skip_cleanup: true

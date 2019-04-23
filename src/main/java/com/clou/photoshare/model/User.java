@@ -9,7 +9,9 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConverted;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Email;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @DynamoDBTable(tableName = "User")
 public class User {
@@ -26,7 +28,7 @@ public class User {
     @Email
     private String email;
 
-    private List<User> friends;
+    private Set<String> friends;
 
     @NotNull
     private S3Address profilePhotoAddress;
@@ -34,13 +36,15 @@ public class User {
     // have a empty consturctor so we can constrcut object from DB
     public User () {}
 
-    public User(String id, String nickName, String firstName, String lastName, String email, S3Address profilePhotoAddress) {
+    public User(String id, String nickName, String firstName, String lastName,
+                String email, S3Address profilePhotoAddress, Set<String> friends) {
         this.id = id;
         this.nickName = nickName;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.friends = new ArrayList<>();
+        this.friends = friends;
+        this.friends.add(this.id);
         this.profilePhotoAddress = profilePhotoAddress;
     }
 
@@ -82,9 +86,9 @@ public class User {
     }
 
     @DynamoDBAttribute(attributeName = "Friends")
-    public List<User> getFriends() { return friends; }
+    public Set<String> getFriends() { return friends; }
 
-    public void setFriends(List<User> firends) { this.friends = friends; }
+    public void setFriends(Set<String> friends) { this.friends = friends; }
 
     @DynamoDBTypeConverted(converter = S3Address.S3AddressConverter.class)
     @DynamoDBAttribute(attributeName = "ProfilePhotoAddress")
@@ -132,6 +136,7 @@ public class User {
                         && user.getFirstName().equals(this.getFirstName())
                         && user.getLastName().equals(this.getLastName())
                         && user.getNickName().equals(this.getNickName())
+                        && user.getProfilePhotoAddress().equals(this.getProfilePhotoAddress())
         );
     }
 }
