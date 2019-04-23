@@ -2,6 +2,7 @@ package com.clou.photoshare.model;
 
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConverter;
+import com.clou.photoshare.errorHandler.InvalidArgumentException;
 import org.springframework.stereotype.Component;
 
 
@@ -49,31 +50,24 @@ public class S3Address {
     static public class S3AddressConverter implements DynamoDBTypeConverter<String, S3Address> {
 
         @Override
-        public String convert(S3Address s3address) {
-            String addressStr = null;
-            S3Address itemS3Address = (S3Address) s3address;
-
-            try {
-                if (itemS3Address != null) {
-                    addressStr = itemS3Address.toString();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        public String convert(S3Address s3Address) {
+            String addressStr;
+            if (s3Address.addressBucket.isEmpty() || s3Address.addressKey.isEmpty())
+                throw new InvalidArgumentException("wrong s3 address");
+            addressStr = s3Address.toString();
             return addressStr;
         }
 
         @Override
         public S3Address unconvert(String s) {
             S3Address s3Address = new S3Address();
-            try {
-                if (s != null && s.length() != 0) {
-                    String[] data = s.split("@");
-                    s3Address.setAddressBucket(data[0].trim());
-                    s3Address.setAddressKey(data[1].trim());
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
+            if (s.length() >= 3 && s.contains("@") ) {
+                String[] data = s.split("@");
+                s3Address.setAddressBucket(data[0]);
+                s3Address.setAddressKey(data[1]);
+            }
+            else {
+                throw new InvalidArgumentException("wrong s3 address");
             }
             return s3Address;
         }

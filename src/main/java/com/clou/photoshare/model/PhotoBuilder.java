@@ -1,13 +1,10 @@
 package com.clou.photoshare.model;
 
-import org.springframework.beans.factory.annotation.Value;
-
-
 
 public class PhotoBuilder {
 
     private String _id;
-    private String _owenerId;
+    private String _ownerId;
     private String _tripsId;
 
     private S3Address _photoAddress = new S3Address();
@@ -16,7 +13,7 @@ public class PhotoBuilder {
     }
 
     public Photo buildPhoto() {
-        Photo ph = new Photo(this._id, this._owenerId, this._tripsId, this._photoAddress);
+        Photo ph = new Photo(this._id, this._ownerId, this._tripsId, this._photoAddress);
         return ph;
     }
 
@@ -27,7 +24,7 @@ public class PhotoBuilder {
 
 
     public PhotoBuilder ownerId(String ownerId){
-        this._owenerId = ownerId;
+        this._ownerId = ownerId;
         return this;
     }
 
