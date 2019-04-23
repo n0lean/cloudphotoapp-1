@@ -48,8 +48,8 @@ import org.springframework.test.context.web.WebAppConfiguration;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = PhotoshareApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource(properties = {
-        "amazon.dynamodb.endpoint=http://localhost:8000/",
-        "amazon.dynamodb.region=us-east-1",
+        "DYNAMODB_ENDPOINT=http://localhost:8000/",
+        "DYNAMODB_REGION=us-east-1",
         "AWS_ACCESS_KEY=test1",
         "AWS_ACCESS_KEY_ID=test231" })
 public class UserTest {
@@ -94,6 +94,7 @@ public class UserTest {
                 .id(null)
                 .email("123@ab.com")
                 .profilePhotoAddress(address)
+                .nickName("nickname")
                 .buildUser();
 
         Set<ConstraintViolation<User>> constraintViolations = validator.validateProperty(user, "id");
@@ -107,6 +108,7 @@ public class UserTest {
                 .id("123")
                 .email("12om")
                 .profilePhotoAddress(address)
+                .nickName("nickname")
                 .buildUser();
 
         Set<ConstraintViolation<User>> constraintViolations = validator.validateProperty(user, "email");

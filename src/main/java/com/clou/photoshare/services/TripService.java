@@ -45,8 +45,8 @@ public class TripService {
         for (String memberId : tripMember) {
             User member = userRepository.findById(memberId).orElseThrow(()-> new UserNotFoundException(memberId));
             Photo photo = photosRepository
-                    .findById(member.getProfilePhotoAddress())
-                    .orElseThrow(()-> new PhotoNotFoundException(member.getProfilePhotoAddress()));
+                    .findById(member.getProfilePhotoAddress().toString())
+                    .orElseThrow(()-> new PhotoNotFoundException(member.getProfilePhotoAddress().toString()));
             photoList.add(photo);
         }
         return photoList;

@@ -14,6 +14,7 @@ import com.amazonaws.services.dynamodbv2.local.embedded.DynamoDBEmbedded;
 import com.amazonaws.services.dynamodbv2.local.main.ServerRunner;
 import com.amazonaws.services.dynamodbv2.local.server.DynamoDBProxyServer;
 import com.amazonaws.services.dynamodbv2.model.*;
+import com.clou.photoshare.model.S3Address;
 import com.clou.photoshare.model.Trip;
 import com.clou.photoshare.model.User;
 import com.clou.photoshare.model.UserBuilder;
@@ -77,6 +78,7 @@ public class UserDBTest {
                 .nickName("test")
                 .firstName("c")
                 .lastName("a")
+                .profilePhotoAddress(new S3Address("123", "123"))
                 .buildUser();
         repo.save(testUser);
 
@@ -101,6 +103,7 @@ public class UserDBTest {
                 .nickName("test")
                 .firstName("c")
                 .lastName("a")
+                .profilePhotoAddress(new S3Address("123", "123"))
                 .buildUser();
         repo.save(testUser);
 

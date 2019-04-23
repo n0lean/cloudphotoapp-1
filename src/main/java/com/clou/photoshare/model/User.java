@@ -36,13 +36,15 @@ public class User {
     // have a empty consturctor so we can constrcut object from DB
     public User () {}
 
-    public User(String id, String nickName, String firstName, String lastName, String email, S3Address profilePhotoAddress) {
+    public User(String id, String nickName, String firstName, String lastName,
+                String email, S3Address profilePhotoAddress, Set<String> friends) {
         this.id = id;
         this.nickName = nickName;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.friends = new HashSet<>();
+        this.friends = friends;
+        this.friends.add(this.id);
         this.profilePhotoAddress = profilePhotoAddress;
     }
 
@@ -134,6 +136,7 @@ public class User {
                         && user.getFirstName().equals(this.getFirstName())
                         && user.getLastName().equals(this.getLastName())
                         && user.getNickName().equals(this.getNickName())
+                        && user.getProfilePhotoAddress().equals(this.getProfilePhotoAddress())
         );
     }
 }
