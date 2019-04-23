@@ -27,7 +27,7 @@ public class User {
     @Email
     private String email;
 
-    private Set<User> friends;
+    private Set<String> friends;
 
     @NotNull
     private S3Address profilePhotoAddress;
@@ -83,9 +83,9 @@ public class User {
     }
 
     @DynamoDBAttribute(attributeName = "Friends")
-    public List<User> getFriends() { return friends; }
+    public Set<String> getFriends() { return friends; }
 
-    public void setFriends(List<User> firends) { this.friends = friends; }
+    public void setFriends(Set<String> friends) { this.friends = friends; }
 
     @DynamoDBAttribute(attributeName = "AddressKey")
     public String getAddressKey() {
