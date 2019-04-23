@@ -15,7 +15,8 @@ import java.util.Set;
 @EnableScan
 public interface PhotoSearchRepository extends CrudRepository<PhotoSearch, String> {
 
-    Set<String> findByUserIdAndTripId(@Param("UserId") String userId, @Param("TripId") String tripId);
-    Set<String> findByPhotoSearchId(@Param("threadId") PhotoSearchId Id);
+    PhotoSearch findByUserIdAndTripId(@Param("UserId") String userId, @Param("TripId") String tripId);
+    PhotoSearch findByPhotoSearchId(@Param("threadId") PhotoSearchId Id);
+    List<PhotoSearch> findByTripId(String tripId);
 
 }

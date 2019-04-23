@@ -1,10 +1,12 @@
 package com.clou.photoshare.controller;
+import com.clou.photoshare.model.S3Address;
 import com.clou.photoshare.services.PhotoDistributionService;
 import com.clou.photoshare.errorHandler.PhotoIsNullException;
 import com.clou.photoshare.errorHandler.PhotoNotFoundException;
 import com.clou.photoshare.model.Photo;
 import com.clou.photoshare.model.PhotoBuilder;
 import com.clou.photoshare.repository.PhotosRepository;
+import com.clou.photoshare.services.PhotoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +22,8 @@ import java.util.UUID;
 @RequestMapping("/photos")
 public class PhotoController {
 
-    final PhotosRepository repository;
+    private final PhotosRepository repository;
+    private final PhotoService photoService;
 
     public boolean checkIsNull(Photo photo){
         if(photo.getId().isEmpty() || photo.getOwnerId().isEmpty()
@@ -31,8 +34,10 @@ public class PhotoController {
     }
 
     @Autowired
-    public PhotoController(PhotosRepository repo){
+    public PhotoController(PhotosRepository repo ,PhotoService service){
+
         this.repository = repo;
+        this.photoService = service;
     }
 
     @RequestMapping(value = "/new", method = RequestMethod.POST)
@@ -51,6 +56,7 @@ public class PhotoController {
             repository.save(newPhoto);
 
             //add trigger API
+            photoService.triggerAssignViewers(photo);
 
             return new ResponseEntity<>(newPhoto, HttpStatus.CREATED);
         }catch (Exception e){
@@ -64,7 +70,6 @@ public class PhotoController {
                                       @PathVariable("photoId") String photoId) {
         try{
             Photo photo = repository.findById(photoId).orElseThrow(()-> new PhotoNotFoundException(photoId));
-
             return new ResponseEntity<>(photo, HttpStatus.OK);
         }catch (Exception e){
             return ResponseEntity.badRequest().body(e.toString());
@@ -77,14 +82,12 @@ public class PhotoController {
     public ResponseEntity<?> findAll(@PathVariable("userId") String userId,
                                      @PathVariable("tripId") String tripId){
         try {
-            String res = "";
-            Iterable<Photo> photos = repository.findAll();
-            for(Photo photo:photos){
-                res += photo.toString() + "<br>";
+
+            Set<S3Address> get = photoService.getAllPhotoByQuery(userId,tripId);
+            if(get == null || get.isEmpty()){
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
-
-
-            return new ResponseEntity<>(res, HttpStatus.OK);
+            return new ResponseEntity<>(get, HttpStatus.OK);
         }catch (Exception e){
             return ResponseEntity.badRequest().body(e.toString());
         }
@@ -113,7 +116,6 @@ public class PhotoController {
                                 .photoKey("123")
                                 .photoId("123")
                                 .buildPhoto();
-
         try {
             return photoService.getFaces(testPhoto);
         } catch (Exception e) {

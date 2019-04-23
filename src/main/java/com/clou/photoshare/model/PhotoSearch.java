@@ -1,10 +1,7 @@
 package com.clou.photoshare.model;
 
 
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBRangeKey;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
+import com.amazonaws.services.dynamodbv2.datamodeling.*;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.annotation.Id;
 
@@ -47,6 +44,7 @@ public class PhotoSearch {
     }
 
     @DynamoDBRangeKey(attributeName = "TripId")
+    @DynamoDBIndexHashKey(attributeName = "TripId",globalSecondaryIndexName="TripId_index")
     public String getTripId() {
         return tripId;
     }
