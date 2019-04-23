@@ -32,13 +32,8 @@ public class PhotoDistributionService {
 //        this.rekoclient = AmazonRekognitionClientBuilder.standard().withCredentials(credProvider).build();
 //    }
 
-    @Autowired
-//    public PhotoDistributionService(AWSCredentialsProvider awsCredentialsProvider, TripService tripService, PhotoService photoService) {
-    public PhotoDistributionService(AWSCredentialsProvider awsCredentialsProvider, TripService tripService) {
-        this.awsCredentialsProvider = awsCredentialsProvider;
-        this.tripService = tripService;
-//        this.photoService = photoService;
-        this.rekoclient = AmazonRekognitionClientBuilder.standard().withCredentials(this.awsCredentialsProvider).build();
+    public PhotoDistributionService() {
+        this.rekoclient = AmazonRekognitionClientBuilder.standard().withCredentials(awsCredentialsProvider).withRegion("us-east-1").build();
     }
 
     // main function

@@ -58,9 +58,7 @@ public class PhotoController {
                     .buildPhoto();
             repository.save(newPhoto);
 
-            //add trigger API
-            //photoService.triggerAssignViewers(photo);
-            // cause test fails
+            photoService.triggerAssignViewers(photo);
 
             return new ResponseEntity<>(newPhoto, HttpStatus.CREATED);
         }catch (InvalidArgumentException e){
@@ -130,6 +128,8 @@ public class PhotoController {
 
     @RequestMapping(value = "/compareface", method = RequestMethod.GET)
     public String compareFace() {
-        return "";
+        PhotoDistributionService photoService = new PhotoDistributionService();
+        String res = photoService.compareFacesInImages("testkey", "testkey3");
+        return res;
     }
 }
