@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.OptionalInt;
 
-
 @RestController
 @RequestMapping("/users")
 public class UserController {

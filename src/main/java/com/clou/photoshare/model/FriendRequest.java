@@ -5,7 +5,6 @@ import com.amazonaws.services.dynamodbv2.datamodeling.*;
 import com.clou.photoshare.util.FriendRequestDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.apache.kafka.common.protocol.types.Field;
-import sun.jvm.hotspot.memory.FreeChunk;
 
 import java.util.Date;
 
