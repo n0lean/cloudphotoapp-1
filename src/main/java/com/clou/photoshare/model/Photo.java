@@ -88,7 +88,9 @@ public class Photo {
         this.photoAddress.setAddressKey(PhotoKey);
     }
 
-
+    public S3Address getPhotoAddress(){
+        return this.photoAddress;
+    }
     @Override
     public String toString(){
         String joinedViewersId = "NULL";

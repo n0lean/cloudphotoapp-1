@@ -30,6 +30,22 @@ public class S3Address {
         this.addressBucket = addressBucket;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+
+        if(obj == null || obj.getClass()!= this.getClass())
+            return false;
+
+        S3Address s3Address = (S3Address) obj;
+        return this.addressKey.equals(s3Address.addressKey) && this.addressBucket.equals(s3Address.addressBucket);
+    }
+
+    @Override
+    public String toString() {
+        return this.getAddressBucket() + "@" + this.getAddressKey();
+    }
+
     static public class S3AddressConverter implements DynamoDBTypeConverter<String, S3Address> {
 
         @Override
@@ -39,7 +55,7 @@ public class S3Address {
 
             try {
                 if (itemS3Address != null) {
-                    addressStr = itemS3Address.getAddressBucket() + "@" + itemS3Address.getAddressKey();
+                    addressStr = itemS3Address.toString();
                 }
             } catch (Exception e) {
                 e.printStackTrace();

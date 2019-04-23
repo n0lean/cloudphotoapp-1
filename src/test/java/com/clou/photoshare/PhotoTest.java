@@ -26,8 +26,8 @@ import static org.junit.Assert.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = PhotoshareApplication.class,webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource(properties = {
-        "amazon.dynamodb.endpoint=http://localhost:8000/",
-        "amazon.dynamodb.region=us-east-1",
+        "DYNAMODB_ENDPOINT=http://localhost:8000/",
+        "DYNAMODB_REGION=us-east-1",
         "AWS_ACCESS_KEY=test1",
         "AWS_ACCESS_KEY_ID=test231" })
 public class PhotoTest {

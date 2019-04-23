@@ -4,10 +4,7 @@ package com.clou.photoshare;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.document.DynamoDB;
-import com.clou.photoshare.model.Trip;
-import com.clou.photoshare.model.TripBuilder;
-import com.clou.photoshare.model.User;
-import com.clou.photoshare.model.UserBuilder;
+import com.clou.photoshare.model.*;
 import com.clou.photoshare.repository.TripRepository;
 import org.junit.After;
 import org.junit.Before;
@@ -29,8 +26,8 @@ import static org.junit.Assert.*;
 @SpringBootTest(classes = PhotoshareApplication.class)
 @WebAppConfiguration
 @TestPropertySource(properties = {
-        "amazon.dynamodb.endpoint=http://localhost:8000/",
-        "amazon.dynamodb.region=us-east-1",
+        "DYNAMODB_ENDPOINT=http://localhost:8000/",
+        "DYNAMODB_REGION=us-east-1",
         "AWS_ACCESS_KEY=test1",
         "AWS_ACCESS_KEY_ID=test231" })
 public class TripDBTest {
@@ -56,6 +53,7 @@ public class TripDBTest {
     @Test
     public void tripTestCase() {
         UUID uuid = UUID.randomUUID();
+        S3Address address = new S3Address("Bucketname", "Key");
         String uuid_str = uuid.toString();
         User testUser = new UserBuilder()
                 .email("test@me.com")
@@ -63,6 +61,7 @@ public class TripDBTest {
                 .nickName("test")
                 .firstName("c")
                 .lastName("a")
+                .profilePhotoAddress(address)
                 .buildUser();
 
         uuid = UUID.randomUUID();

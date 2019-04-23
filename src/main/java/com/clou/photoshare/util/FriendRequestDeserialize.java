@@ -19,9 +19,9 @@ public class FriendRequestDeserialize extends JsonDeserializer<FriendRequest> {
         ObjectCodec oc = jsonParser.getCodec();
         JsonNode node = oc.readTree(jsonParser);
         FriendRequest fr = new FriendsRequestBuilder()
-                                .fromUserId(node.get("fromUserId").asText())
-                                .toUserId(node.get("toUserId").asText())
-                                .buildFriendRequest();
+                .fromUserId(node.get("fromUserId").asText())
+                .toUserId(node.get("toUserId").asText())
+                .buildFriendRequest();
         return fr;
 
     }

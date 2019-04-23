@@ -105,18 +105,18 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-    @RequestMapping(value = "/addfriend", method = RequestMethod.PUT)
-    public ResponseEntity<?> respondFriendRequest(@RequestBody FriendRequest friendRequest) {
-        try {
-            String status = friendRequest.getStatus();
-            if (status == "accepted") {
-                this.userService.acceptFriendRequest(friendRequest);
-            } else {
-                this.userService.declineFriendRequest(friendRequest);
-            }
-            return ResponseEntity.ok().build();
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
-    }
+//    @RequestMapping(value = "/addfriend", method = RequestMethod.PUT)
+//    public ResponseEntity<?> respondFriendRequest(@RequestBody FriendRequest friendRequest) {
+//        try {
+//            String status = friendRequest.getStatus();
+//            if (status == "accepted") {
+//                this.userService.acceptFriendRequest(friendRequest);
+//            } else {
+//                this.userService.declineFriendRequest(friendRequest);
+//            }
+//            return ResponseEntity.ok().build();
+//        } catch (Exception e) {
+//            return ResponseEntity.badRequest().build();
+//        }
+//    }
 }

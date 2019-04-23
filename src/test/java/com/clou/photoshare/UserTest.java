@@ -14,6 +14,7 @@ import javax.validation.ValidatorFactory;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.clou.photoshare.controller.UserController;
+import com.clou.photoshare.errorHandler.InvalidArgumentException;
 import com.clou.photoshare.model.S3Address;
 import com.clou.photoshare.model.User;
 import com.clou.photoshare.model.UserBuilder;
@@ -48,8 +49,8 @@ import org.springframework.test.context.web.WebAppConfiguration;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = PhotoshareApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource(properties = {
-        "amazon.dynamodb.endpoint=http://localhost:8000/",
-        "amazon.dynamodb.region=us-east-1",
+        "DYNAMODB_ENDPOINT=http://localhost:8000/",
+        "DYNAMODB_REGION=us-east-1",
         "AWS_ACCESS_KEY=test1",
         "AWS_ACCESS_KEY_ID=test231" })
 public class UserTest {
@@ -87,17 +88,15 @@ public class UserTest {
         DBTestUtil.createExampleTable(amazonDynamoDB,  dynamoDB, tableName, tableClass);
     }
 
-    @Test
+    @Test(expected = InvalidArgumentException.class)
     public void idIsNull() {
         S3Address address = new S3Address("Bucketname", "Key");
         User user = new UserBuilder()
                 .id(null)
                 .email("123@ab.com")
                 .profilePhotoAddress(address)
+                .nickName("nickname")
                 .buildUser();
-
-        Set<ConstraintViolation<User>> constraintViolations = validator.validateProperty(user, "id");
-        assertEquals(1, constraintViolations.size());
     }
 
     @Test
@@ -107,6 +106,7 @@ public class UserTest {
                 .id("123")
                 .email("12om")
                 .profilePhotoAddress(address)
+                .nickName("nickname")
                 .buildUser();
 
         Set<ConstraintViolation<User>> constraintViolations = validator.validateProperty(user, "email");

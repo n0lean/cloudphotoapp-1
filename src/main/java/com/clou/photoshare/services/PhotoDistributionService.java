@@ -45,7 +45,7 @@ public class PhotoDistributionService {
 
 
 
-    // main function for assign viewer for single photo
+    // main function
     public void assignViewer(Photo photo) {
 
         String tripId = photo.getTripId();
@@ -80,11 +80,6 @@ public class PhotoDistributionService {
 
     }
 
-    // TODO: check if current photo collections has newly added face, should trigger by Trip.addMember()
-    public void checkIfUserAppearsInPhoto(String userId, String tripId) {
-
-    }
-
 
 
     // return an AWS Image object
@@ -116,7 +111,7 @@ public class PhotoDistributionService {
 
         List<CompareFacesMatch> faceDetails = result.getFaceMatches();
         if (faceDetails.size() >0) {
-            return "Matched" + "Confidence: " + faceDetails.get(0).getSimilarity();
+            return "Matched";
         } else {
             return "Not Matched";
         }
