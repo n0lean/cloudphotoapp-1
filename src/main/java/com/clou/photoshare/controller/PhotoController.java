@@ -57,9 +57,7 @@ public class PhotoController {
                     .buildPhoto();
             repository.save(newPhoto);
 
-            //add trigger API
-            //photoService.triggerAssignViewers(photo);
-            // cause test fails
+            photoService.triggerAssignViewers(photo);
 
             return new ResponseEntity<>(newPhoto, HttpStatus.CREATED);
         }catch (InvalidArgumentException e){

@@ -74,7 +74,6 @@ public class PhotoTest {
 //                .photoKey("01010101")
 //                .ownerId(huxin)
 //                .tripId("MYC")
-//                .addViewerId("anda")
 //                .buildPhoto();
 //
 //        repo.save(testPhoto);
