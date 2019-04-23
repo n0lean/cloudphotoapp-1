@@ -12,7 +12,6 @@ public class PhotoSearchId implements Serializable {
     private String userId;
     private String tripId;
 
-
     @DynamoDBHashKey
     public String getUserId() {
         return userId;
