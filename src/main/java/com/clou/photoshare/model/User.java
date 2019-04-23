@@ -3,6 +3,7 @@ package com.clou.photoshare.model;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConverted;
 
 
 import javax.validation.constraints.NotNull;
@@ -87,19 +88,31 @@ public class User {
 
     public void setFriends(Set<String> friends) { this.friends = friends; }
 
-    @DynamoDBAttribute(attributeName = "AddressKey")
-    public String getAddressKey() {
-        return this.profilePhotoAddress.getAddressKey();
+    @DynamoDBTypeConverted(converter = S3Address.S3AddressConverter.class)
+    @DynamoDBAttribute(attributeName = "ProfilePhotoAddress")
+    public S3Address getProfilePhotoAddress() {
+        return this.profilePhotoAddress;
     }
 
-    @DynamoDBAttribute(attributeName = "AddressBucket")
-    public String getAddressBucket () {
-        return this.profilePhotoAddress.getAddressBucket();
+    @DynamoDBAttribute(attributeName = "ProfilePhotoAddress")
+    public void setProfilePhotoAddress(S3Address address) {
+        this.profilePhotoAddress = address;
     }
 
-    public void setProfilePhotoAddress(S3Address newAddress) {
-        this.profilePhotoAddress = newAddress;
-    }
+
+//    @DynamoDBAttribute(attributeName = "AddressKey")
+//    public String getAddressKey() {
+//        return this.profilePhotoAddress.getAddressKey();
+//    }
+//
+//    @DynamoDBAttribute(attributeName = "AddressBucket")
+//    public String getAddressBucket () {
+//        return this.profilePhotoAddress.getAddressBucket();
+//    }
+//
+//    public void setProfilePhotoAddress(S3Address newAddress) {
+//        this.profilePhotoAddress = newAddress;
+//    }
 
     @Override
     public String toString() {
