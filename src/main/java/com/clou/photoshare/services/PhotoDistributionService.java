@@ -40,7 +40,7 @@ public class PhotoDistributionService {
 
 
     public PhotoDistributionService() {
-        this.rekoclient = AmazonRekognitionClientBuilder.standard().withCredentials(awsCredentialsProvider).build();
+        this.rekoclient = AmazonRekognitionClientBuilder.standard().withCredentials(awsCredentialsProvider).withRegion("us-east-1").build();
     }
 
 

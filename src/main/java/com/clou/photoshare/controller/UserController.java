@@ -36,7 +36,7 @@ public class UserController {
     public ResponseEntity<?> addUser(@RequestBody User user) {
         try{
             repository.save(user);
-            return new ResponseEntity<>(user, HttpStatus.OK);
+            return new ResponseEntity<>(user, HttpStatus.CREATED);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.toString());
         }
@@ -102,7 +102,7 @@ public class UserController {
         }
 
         this.userService.addFriendRequest(friendRequest);
-        return ResponseEntity.ok().build();
+        return new ResponseEntity<>(friendRequest, HttpStatus.CREATED);
     }
 
     @RequestMapping(value = "/addfriend", method = RequestMethod.PUT)
@@ -114,7 +114,7 @@ public class UserController {
             } else {
                 this.userService.declineFriendRequest(friendRequest);
             }
-            return ResponseEntity.ok().build();
+            return new ResponseEntity<>(friendRequest, HttpStatus.OK);
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }

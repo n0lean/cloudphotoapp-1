@@ -19,7 +19,9 @@ import com.clou.photoshare.model.*;
 import com.clou.photoshare.repository.UserRepository;
 import org.junit.*;
 
+import static org.hamcrest.core.IsCollectionContaining.hasItems;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 
 import com.amazonaws.services.dynamodbv2.local.embedded.DynamoDBEmbedded;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
@@ -39,10 +41,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -113,7 +120,35 @@ public class UserTest {
     }
 
     @Test
+    public void saveUserTest() throws URISyntaxException {
+        TestRestTemplate restTemplate = new TestRestTemplate();
+
+        UUID uuid = java.util.UUID.randomUUID();
+        String uuid_str = uuid.toString();
+        final String baseurl = createURLWithPort("/users/save");
+
+        URI uri = new URI(baseurl);
+
+        S3Address address = new S3Address("Bucketname", "Key");
+        User testUser = new UserBuilder()
+                .email("test@me.com")
+                .id(uuid_str)
+                .lastName("test")
+                .firstName("before")
+                .nickName("nicname")
+                .profilePhotoAddress(address)
+                .buildUser();
+
+        ResponseEntity<User> res = restTemplate.postForEntity(uri, testUser, User.class);
+        assertEquals(201, res.getStatusCodeValue());
+
+        User result = repo.findById(uuid_str).get();
+        assertEquals(testUser, result);
+    }
+
+    @Test
     public void userTableTest() {
+
         // if this test fails, run "mvn clean install" first the try again
         System.setProperty("sqlite4java.library.path", "native-libs");
         AmazonDynamoDB ddb = DynamoDBEmbedded.create().amazonDynamoDB();
@@ -189,43 +224,64 @@ public class UserTest {
         assertEquals(200, res.getStatusCodeValue());
     }
 
-//    @Test
-//    public void testCreateFriendRequest() throws URISyntaxException {
-//        TestRestTemplate restTemplate = new TestRestTemplate();
+    @Test
+    public void testFriendRequest() throws URISyntaxException {
+        TestRestTemplate restTemplate = new TestRestTemplate();
+
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.add("HeaderName", "value");
+        requestHeaders.add("Content-Type", "application/json");
+
+
+        final String baseurl = createURLWithPort("/users/addfriend");
+        URI uri = new URI(baseurl);
+
+        FriendRequest testFriendRequest = new FriendRequestBuilder()
+                                                .fromUserId("1")
+                                                .toUserId("2")
+                                                .buildFriendRequest();
+        System.out.println(testFriendRequest.toString());
+
+        HttpEntity<FriendRequest> httpEntity = new HttpEntity<>(requestHeaders);
+
+        S3Address address = new S3Address("Bucketname", "Key");
+        User testUser1 = new UserBuilder()
+                .email("test@me.com")
+                .id("1")
+                .lastName("test")
+                .firstName("before")
+                .nickName("nicname")
+                .profilePhotoAddress(address)
+                .buildUser();
+
+        User testUser2 = new UserBuilder()
+                .email("test@me2.com")
+                .id("2")
+                .lastName("test2")
+                .firstName("before2")
+                .nickName("nicname2")
+                .profilePhotoAddress(address)
+                .buildUser();
+
+        repo.save(testUser1);
+        repo.save(testUser2);
+
+        ResponseEntity<FriendRequest> res = restTemplate.postForEntity(uri, testFriendRequest, FriendRequest.class);
+        assertEquals(201, res.getStatusCodeValue());
+
+//        // Friend Request accept
+//        testFriendRequest.setStatus("accepted");
+//        ResponseEntity<FriendRequest> res2 = restTemplate.exchange(uri, HttpMethod.PUT, httpEntity, FriendRequest.class);
+//        assertEquals(200, res2.getStatusCodeValue());
 //
+//        User userFrom = repo.findById("1").get();
+//        User userTo = repo.findById("2").get();
 //
-//        final String baseurl = createURLWithPort("/users/addfriend");
-//
-//        FriendRequest testFriendRequest = new FriendRequestBuilder()
-//                                                .fromUserId("1")
-//                                                .toUserId("2")
-//                                                .buildFriendRequest();
-//
-//        S3Address address = new S3Address("Bucketname", "Key");
-//        User testUser1 = new UserBuilder()
-//                .email("test@me.com")
-//                .id("1")
-//                .lastName("test")
-//                .firstName("before")
-//                .nickName("nicname")
-//                .profilePhotoAddress(address)
-//                .buildUser();
-//
-//        User testUser2 = new UserBuilder()
-//                .email("test@me2.com")
-//                .id("2")
-//                .lastName("test2")
-//                .firstName("before2")
-//                .nickName("nicname2")
-//                .profilePhotoAddress(address)
-//                .buildUser();
-//
-//        repo.save(testUser1);
-//        repo.save(testUser2);
-//
-//        ResponseEntity<>
-//
-//    }
+//        assertThat(userFrom.getFriends(), hasItems("2"));
+//        assertThat(userTo.getFriends(), hasItems("1"));
+
+
+    }
 
     private static CreateTableResult createTable(AmazonDynamoDB ddb, String tableName, String hashKeyName) {
         List<AttributeDefinition> attributeDefinitions = new ArrayList<AttributeDefinition>();

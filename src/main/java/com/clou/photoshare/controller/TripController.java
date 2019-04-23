@@ -31,7 +31,7 @@ public class TripController {
                         .buildTrip();
 
             repository.save(new_trip);
-            return new ResponseEntity<>(new_trip, HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.toString());
         }

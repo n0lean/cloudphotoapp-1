@@ -86,4 +86,9 @@ public class FriendRequest {
     public void setTimeStamp(Date timeStamp) { this.timeStamp = timeStamp; }
 
 
+    @Override
+    public String toString() {
+        return "Object: Friend Request" + " From: " +  this.fromUserId + " To: "  + this.toUserId + ", Created at: " + this.timeStamp.toString();
+    }
+
 }
