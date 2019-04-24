@@ -19,18 +19,12 @@ import java.util.List;
 @Service
 public class PhotoDistributionService {
 
-    @Autowired
     private AWSCredentialsProvider awsCredentialsProvider;
-
-    @Autowired
     private TripService tripService;
-
-    @Autowired
-    private PhotoService photoService;
-
+//    private PhotoService photoService;
     private AmazonRekognition rekoclient;
-
     private float similarityThreshold = 0.7f;
+
 
     // this can be use for development
 //    public PhotoDistributionService () {
@@ -38,12 +32,9 @@ public class PhotoDistributionService {
 //        this.rekoclient = AmazonRekognitionClientBuilder.standard().withCredentials(credProvider).build();
 //    }
 
-
     public PhotoDistributionService() {
         this.rekoclient = AmazonRekognitionClientBuilder.standard().withCredentials(awsCredentialsProvider).withRegion("us-east-1").build();
     }
-
-
 
     // main function
     public void assignViewer(Photo photo) {
@@ -70,7 +61,7 @@ public class PhotoDistributionService {
                     continue;
                 } else {
                     System.out.println("Face Matched");
-                    photoService.assignViewerOnPhotoById(photo, srcPhoto.getOwnerId());
+//                    photoService.assignViewerOnPhotoById(photo, srcPhoto.getOwnerId());
                 }
             } catch (Exception e) {
                 System.out.println(e.getStackTrace());

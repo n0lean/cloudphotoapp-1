@@ -37,7 +37,6 @@ public class PhotoController {
 
     @Autowired
     public PhotoController(PhotosRepository repo ,PhotoService service, PhotoDistributionService distributionService){
-
         this.repository = repo;
         this.photoService = service;
         this.photoDsService = distributionService;
@@ -114,16 +113,15 @@ public class PhotoController {
 
     @RequestMapping(value = "/testface", method = RequestMethod.GET)
     public String testFace() {
-        PhotoDistributionService photoService = new PhotoDistributionService();
         Photo testPhoto = new PhotoBuilder()
                                 .ownerId("123")
                                 .photoKey("123")
                                 .photoId("123")
                                 .buildPhoto();
         try {
-            return photoService.getFaces(testPhoto);
+            return this.photoDsService.getFaces(testPhoto);
         } catch (Exception e) {
-            return "Error" + e.toString();
+            return "Error" + e.getMessage();
         }
     }
 

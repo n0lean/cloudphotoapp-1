@@ -17,12 +17,16 @@ import java.util.Set;
 @Service
 public class PhotoService {
 
-    @Autowired
     private PhotosRepository photosRepository;
+    private PhotoSearchRepository photoSearchRepository;
+    private PhotoDistributionService photoDistributionService;
 
     @Autowired
-    private PhotoSearchRepository photoSearchRepository;
-
+    public PhotoService(PhotosRepository photoRepo, PhotoSearchRepository photoSearchRepo, PhotoDistributionService distSer) {
+        this.photosRepository= photoRepo;
+        this.photoSearchRepository = photoSearchRepo;
+        this.photoDistributionService = distSer;
+    }
 
 
     // TODO: assign new viewer id to to a photo
