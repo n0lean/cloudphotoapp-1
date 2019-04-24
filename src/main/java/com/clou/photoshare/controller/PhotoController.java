@@ -130,6 +130,8 @@ public class PhotoController {
 
     @RequestMapping(value = "/compareface", method = RequestMethod.GET)
     public String compareFace() {
-        return "";
+        PhotoDistributionService photoService = new PhotoDistributionService();
+        String res = photoService.compareFacesInImages("testkey", "testkey3");
+        return res;
     }
 }
