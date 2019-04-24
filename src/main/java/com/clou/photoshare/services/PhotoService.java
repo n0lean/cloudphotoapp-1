@@ -29,13 +29,6 @@ public class PhotoService {
     }
 
 
-
-    //TODO: trigger function for start assignViewerId
-    public void triggerAssignViewers(Photo photo) {
-        photoDistributionService.assignViewer(photo);
-
-    }
-
     // TODO: assign new viewer id to to a photo
     public void assignViewerOnPhotoById(Photo photo, String newViewerId) {
         try {
