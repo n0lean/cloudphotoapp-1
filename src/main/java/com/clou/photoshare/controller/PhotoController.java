@@ -25,6 +25,7 @@ public class PhotoController {
 
     private final PhotosRepository repository;
     private final PhotoService photoService;
+    private final PhotoDistributionService photoDsService;
 
     public boolean checkIsNull(Photo photo){
         if(photo.getId().isEmpty() || photo.getOwnerId().isEmpty()
@@ -35,10 +36,11 @@ public class PhotoController {
     }
 
     @Autowired
-    public PhotoController(PhotosRepository repo ,PhotoService service){
+    public PhotoController(PhotosRepository repo ,PhotoService service, PhotoDistributionService distributionService){
 
         this.repository = repo;
         this.photoService = service;
+        this.photoDsService = distributionService;
     }
 
     @RequestMapping(value = "/new", method = RequestMethod.POST)
@@ -57,7 +59,7 @@ public class PhotoController {
                     .buildPhoto();
             repository.save(newPhoto);
 
-            photoService.triggerAssignViewers(photo);
+            //photoDsService.assignViewer(photo);
 
             return new ResponseEntity<>(newPhoto, HttpStatus.CREATED);
         }catch (InvalidArgumentException e){

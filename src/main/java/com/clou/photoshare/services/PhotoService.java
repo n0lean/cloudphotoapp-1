@@ -23,16 +23,7 @@ public class PhotoService {
     @Autowired
     private PhotoSearchRepository photoSearchRepository;
 
-    @Autowired
-    private PhotoDistributionService photoDistributionService;
 
-
-
-    //TODO: trigger function for start assignViewerId
-    public void triggerAssignViewers(Photo photo) {
-        photoDistributionService.assignViewer(photo);
-
-    }
 
     // TODO: assign new viewer id to to a photo
     public void assignViewerOnPhotoById(Photo photo, String newViewerId) {
