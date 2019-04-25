@@ -17,8 +17,10 @@ public class FriendRequestDeserialize extends JsonDeserializer<FriendRequest> {
     public FriendRequest deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
         ObjectCodec oc = jsonParser.getCodec();
         JsonNode node = oc.readTree(jsonParser);
+        System.out.println("DEBUG: ");
+        System.out.println(node.toString());
         FriendRequest fr = new FriendRequestBuilder()
-                .fromUserId(node.get("fromUserId").textValue())
+                .fromUserId(node.get("fromUserId").asText())
                 .toUserId(node.get("toUserId").textValue())
                 .buildFriendRequest();
         return fr;

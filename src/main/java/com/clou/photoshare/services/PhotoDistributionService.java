@@ -7,6 +7,7 @@ import com.amazonaws.services.rekognition.AmazonRekognition;
 import com.amazonaws.services.rekognition.AmazonRekognitionClientBuilder;
 import com.amazonaws.services.rekognition.model.*;
 import com.clou.photoshare.model.Photo;
+import com.clou.photoshare.model.Trip;
 import io.swagger.annotations.AuthorizationScope;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -68,6 +69,11 @@ public class PhotoDistributionService {
             }
         }
 
+
+    }
+
+    // main function for triggering assign
+    public void assignMember(String tripId, String newMemberId) {
 
     }
 
