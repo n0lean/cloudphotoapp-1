@@ -8,6 +8,7 @@ import com.clou.photoshare.repository.PhotosRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -69,4 +70,26 @@ public class PhotoService {
             return null;
         }
     }
+
+    //TODO: Give a user entity, return a photo entity contains user profile photo
+    /**
+     *
+     * @param user
+     * @return A photo object
+     */
+    public Photo getProfilePhoto(User user) {
+        return new Photo();
+    }
+
+    //TODO: Give a trip entity, return a List<Photo> that are already belongs to this Trip
+
+    /**
+     *
+     * @param trip
+     * @return A list of photo in a trip
+     */
+    public List<Photo> getPhotosByTrip(Trip trip) {
+        return new ArrayList<>();
+    }
+
 }
