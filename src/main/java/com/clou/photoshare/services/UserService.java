@@ -126,4 +126,14 @@ public class UserService {
         return this.friendRequestRepository.findFriendRequestByToUserId(userId);
     }
 
+
+    /**
+     * Get User entity by userId
+     * @param userId
+     * @return
+     * @throws UserNotFoundException
+     */
+    public User getUserById(String userId) throws UserNotFoundException {
+        return this.userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
+    }
 }

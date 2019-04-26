@@ -8,6 +8,7 @@ import com.amazonaws.services.rekognition.AmazonRekognitionClientBuilder;
 import com.amazonaws.services.rekognition.model.*;
 import com.clou.photoshare.model.Photo;
 import com.clou.photoshare.model.Trip;
+import com.clou.photoshare.model.User;
 import io.swagger.annotations.AuthorizationScope;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,6 +23,8 @@ public class PhotoDistributionService {
 
     private AWSCredentialsProvider awsCredentialsProvider;
     private TripService tripService;
+    private UserService userService;
+    private PhotoService photoService;
 //    private PhotoService photoService;
     private AmazonRekognition rekoclient;
     private float similarityThreshold = 0.7f;
@@ -72,9 +75,34 @@ public class PhotoDistributionService {
 
     }
 
-    // main function for triggering assign
-    public void assignMember(String tripId, String newMemberId) {
+    public void assignMemberToPhotos(Trip trip, String newMemberId) {
+        // get user profile photo
+        User user = this.userService.getUserById(newMemberId);
+        Photo userProfilePhoto = this.photoService.getProfilePhoto(user);
+        Image profileImg = awsImageConstructor(userProfilePhoto);
 
+        List<Photo> tripPhotos = this.photoService.getPhotosByTrip(trip);
+
+        for (Photo targetPhoto : tripPhotos) {
+            Image targetImg = awsImageConstructor(targetPhoto);
+            CompareFacesRequest request = new CompareFacesRequest()
+                                            .withSimilarityThreshold(similarityThreshold)
+                                            .withSourceImage(profileImg)
+                                            .withTargetImage(targetImg);
+
+            try {
+                CompareFacesResult result = this.rekoclient.compareFaces(request);
+                List<CompareFacesMatch> facesMatches = result.getFaceMatches();
+                if (facesMatches.size() == 0) {
+                    continue;
+                } else {
+                    System.out.println("Photo Matched");
+                    this.photoService.assignViewerOnPhotoById(targetPhoto, newMemberId);
+                }
+            } catch (Exception e) {
+                System.out.println(e.getStackTrace());
+            }
+        }
     }
 
 
