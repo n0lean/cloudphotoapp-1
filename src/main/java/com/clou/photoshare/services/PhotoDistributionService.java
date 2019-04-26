@@ -31,7 +31,7 @@ public class PhotoDistributionService {
 //        DefaultAWSCredentialsProviderChain credProvider = new DefaultAWSCredentialsProviderChain();
 //        this.rekoclient = AmazonRekognitionClientBuilder.standard().withCredentials(credProvider).build();
 //    }
-
+    @Autowired
     public PhotoDistributionService() {
         this.rekoclient = AmazonRekognitionClientBuilder.standard().withCredentials(awsCredentialsProvider).withRegion("us-east-1").build();
     }
