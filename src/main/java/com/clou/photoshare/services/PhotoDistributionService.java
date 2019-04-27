@@ -12,6 +12,7 @@ import com.clou.photoshare.model.User;
 import io.swagger.annotations.AuthorizationScope;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
@@ -35,12 +36,13 @@ public class PhotoDistributionService {
 //        DefaultAWSCredentialsProviderChain credProvider = new DefaultAWSCredentialsProviderChain();
 //        this.rekoclient = AmazonRekognitionClientBuilder.standard().withCredentials(credProvider).build();
 //    }
-
+    @Autowired
     public PhotoDistributionService() {
         this.rekoclient = AmazonRekognitionClientBuilder.standard().withCredentials(awsCredentialsProvider).withRegion("us-east-1").build();
     }
 
     // main function
+    @Async
     public void assignViewer(Photo photo) {
 
         String tripId = photo.getTripId();
@@ -71,11 +73,9 @@ public class PhotoDistributionService {
                 System.out.println(e.getStackTrace());
             }
         }
-
-
     }
 
-    public void assignMemberToPhotos(Trip trip, String newMemberId) {
+    public void assignPhotosToMember(Trip trip, String newMemberId) {
         // get user profile photo
         User user = this.userService.getUserById(newMemberId);
         Photo userProfilePhoto = this.photoService.getProfilePhoto(user);
@@ -104,8 +104,6 @@ public class PhotoDistributionService {
             }
         }
     }
-
-
 
     // return an AWS Image object
     public Image awsImageConstructor(Photo photo) {

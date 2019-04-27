@@ -45,6 +45,7 @@ public class PhotoService {
                     .set_tripId(photo.getTripId())
                     .set_userId(newViewerId)
                     .builder();
+            photoSearchRepository.save(photoSearch);
         }catch (Exception e){
             System.out.println(e);
         }
@@ -78,7 +79,8 @@ public class PhotoService {
      * @return A photo object
      */
     public Photo getProfilePhoto(User user) {
-        return new Photo();
+        return photosRepository.findById(user.getProfilePhotoId()).
+                orElseThrow(() -> new PhotoNotFoundException("profile photo not found"));
     }
 
     //TODO: Give a trip entity, return a List<Photo> that are already belongs to this Trip
@@ -89,7 +91,9 @@ public class PhotoService {
      * @return A list of photo in a trip
      */
     public List<Photo> getPhotosByTrip(Trip trip) {
-        return new ArrayList<>();
+        List<Photo> photos = photosRepository.findByTripId(trip.getId());
+
+        return photos;
     }
 
 }
