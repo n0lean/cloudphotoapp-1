@@ -88,6 +88,10 @@ public class UserService {
         userFrom.getFriends().add(toUserId);
         userTo.getFriends().add(fromUserId);
 
+        System.out.println("==============================");
+        System.out.println(userFrom.getFriends());
+        System.out.println("================");
+
         this.userRepository.save(userFrom);
         this.userRepository.save(userTo);
         this.friendRequestRepository.delete(friendRequest);

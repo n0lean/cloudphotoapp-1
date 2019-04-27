@@ -123,7 +123,11 @@ public class UserController {
     public ResponseEntity<?> respondFriendRequest(@RequestBody FriendRequest friendRequest) {
         try {
             String status = friendRequest.getStatus();
-            if (status == "accepted") {
+
+            System.out.println("===========================");
+            System.out.println(status);
+            System.out.println("============================");
+            if (status.equals("accepted")) {
                 this.userService.acceptFriendRequest(friendRequest);
             } else {
                 this.userService.declineFriendRequest(friendRequest);

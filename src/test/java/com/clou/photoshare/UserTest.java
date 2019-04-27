@@ -252,7 +252,7 @@ public class UserTest {
                                                 .buildFriendRequest();
         System.out.println(testFriendRequest.toString());
 
-        HttpEntity<FriendRequest> httpEntity = new HttpEntity<>(requestHeaders);
+        // HttpEntity<FriendRequest> httpEntity = new HttpEntity<>(requestHeaders);
 
         S3Address address = new S3Address("Bucketname", "Key");
         User testUser1 = new UserBuilder()
@@ -281,16 +281,21 @@ public class UserTest {
         assertEquals(201, res.getStatusCodeValue());
 
         // Friend Request accept
-//        System.out.println("Testing accepting ")
-//        testFriendRequest.setStatus("accepted");
-//        ResponseEntity<FriendRequest> res2 = restTemplate.exchange(uri, HttpMethod.PUT, httpEntity, FriendRequest.class);
-//        assertEquals(200, res2.getStatusCodeValue());
+        System.out.println("Testing accepting ");
+        testFriendRequest.setStatus("accepted");
+        HttpEntity<FriendRequest> httpEntity = new HttpEntity<>(testFriendRequest, requestHeaders);
+        ResponseEntity<FriendRequest> res2 = restTemplate.exchange(uri, HttpMethod.PUT, httpEntity, FriendRequest.class);
+        assertEquals(200, res2.getStatusCodeValue());
+        System.out.println("Friend Request Accepted");
+
+        User userFrom = repo.findById("1").get();
+        User userTo = repo.findById("2").get();
 //
-//        User userFrom = repo.findById("1").get();
-//        User userTo = repo.findById("2").get();
-//
-//        assertThat(userFrom.getFriends(), hasItems("2"));
-//        assertThat(userTo.getFriends(), hasItems("1"));
+//        System.out.println("User Finded");
+//        System.out.println("User 1" + userFrom.getFriends().toString());
+//        System.out.println("User 2" + userTo.getFriends().toString());
+        assertThat(userFrom.getFriends(), hasItems("2"));
+        assertThat(userTo.getFriends(), hasItems("1"));
     }
 
     private static CreateTableResult createTable(AmazonDynamoDB ddb, String tableName, String hashKeyName) {
