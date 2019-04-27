@@ -45,6 +45,7 @@ public class PhotoService {
                     .set_tripId(photo.getTripId())
                     .set_userId(newViewerId)
                     .builder();
+            photoSearchRepository.save(photoSearch);
         }catch (Exception e){
             System.out.println(e);
         }
@@ -89,7 +90,9 @@ public class PhotoService {
      * @return A list of photo in a trip
      */
     public List<Photo> getPhotosByTrip(Trip trip) {
-        return new ArrayList<>();
+        List<Photo> photos = photosRepository.findByTripId(trip.getId());
+
+        return photos;
     }
 
 }

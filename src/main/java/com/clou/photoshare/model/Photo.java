@@ -61,6 +61,7 @@ public class Photo {
 
 
     @DynamoDBAttribute(attributeName = "TripId")
+    @DynamoDBIndexHashKey(attributeName = "TripId",globalSecondaryIndexName="TripId_index")
     public String getTripId(){
         return this.tripId;
     }

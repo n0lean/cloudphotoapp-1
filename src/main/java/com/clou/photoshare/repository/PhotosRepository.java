@@ -14,4 +14,5 @@ public interface PhotosRepository extends CrudRepository<Photo, String> {
 //    Photo findByAddress(String address);
 //    @EnableScan
 //    List<Photo> findByOwnerId(String ownerId);
+      List<Photo> findByTripId(String TripId);
 }
