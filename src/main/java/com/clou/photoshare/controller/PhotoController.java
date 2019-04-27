@@ -48,7 +48,6 @@ public class PhotoController {
             throw new PhotoIsNullException(photo);
         }
         try {
-
             Photo newPhoto = new PhotoBuilder()
                     .photoId(photo.getId())
                     .ownerId(photo.getOwnerId())
@@ -85,7 +84,6 @@ public class PhotoController {
     public ResponseEntity<?> findAll(@PathVariable("userId") String userId,
                                      @PathVariable("tripId") String tripId){
         try {
-
             Set<S3Address> get = photoService.getAllPhotoByQuery(userId,tripId);
             if(get == null || get.isEmpty()){
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);

@@ -79,6 +79,7 @@ public class UserDBTest {
                 .nickName("test")
                 .firstName("c")
                 .lastName("a")
+                .profilePhotoId("123123")
                 .profilePhotoAddress(new S3Address("123", "123"))
                 .buildUser();
         repo.save(testUser);
@@ -103,6 +104,7 @@ public class UserDBTest {
                 .id(uuid_str)
                 .nickName("test")
                 .firstName("c")
+                .profilePhotoId("123123")
                 .lastName("a")
                 .profilePhotoAddress(new S3Address("123", "123"))
                 .buildUser();
