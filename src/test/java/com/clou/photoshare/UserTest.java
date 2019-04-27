@@ -280,7 +280,8 @@ public class UserTest {
         // System.out.print(res.getBody().toString());
         assertEquals(201, res.getStatusCodeValue());
 
-//        // Friend Request accept
+        // Friend Request accept
+//        System.out.println("Testing accepting ")
 //        testFriendRequest.setStatus("accepted");
 //        ResponseEntity<FriendRequest> res2 = restTemplate.exchange(uri, HttpMethod.PUT, httpEntity, FriendRequest.class);
 //        assertEquals(200, res2.getStatusCodeValue());
@@ -329,6 +330,7 @@ public class UserTest {
     @After
     public void tearDown() {
         DBTestUtil.deleteExampleTable(dynamoDB, tableName);
+        DBTestUtil.deleteExampleTable(dynamoDB, friendRequestTableName);
     }
 
 
