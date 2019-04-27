@@ -33,11 +33,15 @@ public class User {
     @NotNull
     private S3Address profilePhotoAddress;
 
+    @NotNull
+    private String profilePhotoId;
+
     // have a empty consturctor so we can constrcut object from DB
     public User () {}
 
     public User(String id, String nickName, String firstName, String lastName,
-                String email, S3Address profilePhotoAddress, Set<String> friends) {
+                String email, S3Address profilePhotoAddress, Set<String> friends,
+                String profilePhotoId) {
         this.id = id;
         this.nickName = nickName;
         this.firstName = firstName;
@@ -46,6 +50,7 @@ public class User {
         this.friends = friends;
         this.friends.add(this.id);
         this.profilePhotoAddress = profilePhotoAddress;
+        this.profilePhotoId = profilePhotoId;
     }
 
     @DynamoDBHashKey(attributeName = "Id")
@@ -101,6 +106,14 @@ public class User {
         this.profilePhotoAddress = address;
     }
 
+    @DynamoDBAttribute(attributeName = "ProfilePhotoId")
+    public String getProfilePhotoId() {
+        return this.profilePhotoId;
+    }
+
+    public void setProfilePhotoId(String profilePhotoId) {
+        this.profilePhotoId = profilePhotoId;
+    }
 
 //    @DynamoDBAttribute(attributeName = "AddressKey")
 //    public String getAddressKey() {
@@ -137,6 +150,7 @@ public class User {
                         && user.getLastName().equals(this.getLastName())
                         && user.getNickName().equals(this.getNickName())
                         && user.getProfilePhotoAddress().equals(this.getProfilePhotoAddress())
+                        && user.getProfilePhotoId().equals(this.getProfilePhotoId())
         );
     }
 }

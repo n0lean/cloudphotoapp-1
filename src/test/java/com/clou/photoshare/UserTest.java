@@ -102,6 +102,7 @@ public class UserTest {
                 .email("123@ab.com")
                 .profilePhotoAddress(address)
                 .nickName("nickname")
+                .profilePhotoId("123123")
                 .buildUser();
     }
 
@@ -113,6 +114,7 @@ public class UserTest {
                 .email("12om")
                 .profilePhotoAddress(address)
                 .nickName("nickname")
+                .profilePhotoId("123123")
                 .buildUser();
 
         Set<ConstraintViolation<User>> constraintViolations = validator.validateProperty(user, "email");
@@ -136,6 +138,7 @@ public class UserTest {
                 .lastName("test")
                 .firstName("before")
                 .nickName("nicname")
+                .profilePhotoId("123123")
                 .profilePhotoAddress(address)
                 .buildUser();
 
@@ -181,6 +184,7 @@ public class UserTest {
                 .lastName("test")
                 .firstName("before")
                 .nickName("nicname")
+                .profilePhotoId("123123")
                 .profilePhotoAddress(address)
                 .buildUser();
 
@@ -215,6 +219,7 @@ public class UserTest {
                 .lastName("test")
                 .firstName("before")
                 .nickName("nicname")
+                .profilePhotoId("123123")
                 .profilePhotoAddress(address)
                 .buildUser();
 

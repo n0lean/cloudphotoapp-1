@@ -78,7 +78,8 @@ public class PhotoService {
      * @return A photo object
      */
     public Photo getProfilePhoto(User user) {
-        return new Photo();
+        return photosRepository.findById(user.getProfilePhotoId()).
+                orElseThrow(() -> new PhotoNotFoundException("profile photo not found"));
     }
 
     //TODO: Give a trip entity, return a List<Photo> that are already belongs to this Trip

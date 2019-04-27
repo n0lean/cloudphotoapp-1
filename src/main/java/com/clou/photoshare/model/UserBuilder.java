@@ -14,6 +14,7 @@ public class UserBuilder {
     private String _email;
     private S3Address _address;
     private Set<String> _friends;
+    private String _profilePhotoId;
 
     public UserBuilder() {  }
 
@@ -25,7 +26,13 @@ public class UserBuilder {
         }
         if (this._friends == null) this._friends = new HashSet<>();
         this._friends.add(this._id);
-        return new User(this._id, this._nickName, this._firstName, this._lastName, this._email, this._address, this._friends);
+        return new User(this._id, this._nickName, this._firstName, this._lastName,
+                this._email, this._address, this._friends, this._profilePhotoId);
+    }
+
+    public UserBuilder profilePhotoId(String _profilePhotoId) {
+        this._profilePhotoId = _profilePhotoId;
+        return this;
     }
 
     public UserBuilder id(String _id) {
