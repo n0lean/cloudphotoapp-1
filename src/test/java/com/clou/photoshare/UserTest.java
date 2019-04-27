@@ -76,6 +76,8 @@ public class UserTest {
     private DynamoDB dynamoDB;
     private String tableName = "User";
     private Class tableClass = User.class;
+    private String friendRequestTableName = "FriendRequest";
+    private Class friendRequestTableClass = FriendRequest.class;
     private static Validator validator;
 
     private String createURLWithPort(String uri) {
@@ -92,6 +94,7 @@ public class UserTest {
     public void setUp() throws Exception {
         this.dynamoDB = new DynamoDB(amazonDynamoDB);
         DBTestUtil.createExampleTable(amazonDynamoDB,  dynamoDB, tableName, tableClass);
+        DBTestUtil.createExampleTableWithSecondaryIndex(amazonDynamoDB, dynamoDB, friendRequestTableName, friendRequestTableClass);
     }
 
     @Test(expected = InvalidArgumentException.class)
@@ -224,64 +227,65 @@ public class UserTest {
         assertEquals(200, res.getStatusCodeValue());
     }
 
-//    @Test
-//    public void testFriendRequest() throws URISyntaxException {
-//        TestRestTemplate restTemplate = new TestRestTemplate();
+    @Test
+    public void testFriendRequest() throws URISyntaxException {
+        TestRestTemplate restTemplate = new TestRestTemplate();
+
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.add("HeaderName", "value");
+        requestHeaders.add("Content-Type", "application/json");
+
+
+        final String baseurl = createURLWithPort("/users/addfriend/");
+        URI uri = new URI(baseurl);
+
+        FriendRequest testFriendRequest = new FriendRequestBuilder()
+                                                .fromUserId("1")
+                                                .toUserId("2")
+                                                .status("pending")
+                                                .timeStamp("abc")
+                                                .buildFriendRequest();
+        System.out.println(testFriendRequest.toString());
+
+        HttpEntity<FriendRequest> httpEntity = new HttpEntity<>(requestHeaders);
+
+        S3Address address = new S3Address("Bucketname", "Key");
+        User testUser1 = new UserBuilder()
+                .email("test@me.com")
+                .id("1")
+                .lastName("test")
+                .firstName("before")
+                .nickName("nicname")
+                .profilePhotoAddress(address)
+                .buildUser();
+
+        User testUser2 = new UserBuilder()
+                .email("test@me2.com")
+                .id("2")
+                .lastName("test2")
+                .firstName("before2")
+                .nickName("nicname2")
+                .profilePhotoAddress(address)
+                .buildUser();
+
+        repo.save(testUser1);
+        repo.save(testUser2);
+
+        ResponseEntity<FriendRequest> res = restTemplate.postForEntity(uri, testFriendRequest, FriendRequest.class);
+        // System.out.print(res.getBody().toString());
+        assertEquals(201, res.getStatusCodeValue());
+
+//        // Friend Request accept
+//        testFriendRequest.setStatus("accepted");
+//        ResponseEntity<FriendRequest> res2 = restTemplate.exchange(uri, HttpMethod.PUT, httpEntity, FriendRequest.class);
+//        assertEquals(200, res2.getStatusCodeValue());
 //
-//        HttpHeaders requestHeaders = new HttpHeaders();
-//        requestHeaders.add("HeaderName", "value");
-//        requestHeaders.add("Content-Type", "application/json");
+//        User userFrom = repo.findById("1").get();
+//        User userTo = repo.findById("2").get();
 //
-//
-//        final String baseurl = createURLWithPort("/users/addfriend");
-//        URI uri = new URI(baseurl);
-//
-//        FriendRequest testFriendRequest = new FriendRequestBuilder()
-//                                                .fromUserId("1")
-//                                                .toUserId("2")
-//                                                .buildFriendRequest();
-//        System.out.println(testFriendRequest.toString());
-//
-//        HttpEntity<FriendRequest> httpEntity = new HttpEntity<>(requestHeaders);
-//
-//        S3Address address = new S3Address("Bucketname", "Key");
-//        User testUser1 = new UserBuilder()
-//                .email("test@me.com")
-//                .id("1")
-//                .lastName("test")
-//                .firstName("before")
-//                .nickName("nicname")
-//                .profilePhotoAddress(address)
-//                .buildUser();
-//
-//        User testUser2 = new UserBuilder()
-//                .email("test@me2.com")
-//                .id("2")
-//                .lastName("test2")
-//                .firstName("before2")
-//                .nickName("nicname2")
-//                .profilePhotoAddress(address)
-//                .buildUser();
-//
-//        repo.save(testUser1);
-//        repo.save(testUser2);
-//
-//        ResponseEntity<FriendRequest> res = restTemplate.postForEntity(uri, testFriendRequest, FriendRequest.class);
-//        assertEquals(201, res.getStatusCodeValue());
-//
-////        // Friend Request accept
-////        testFriendRequest.setStatus("accepted");
-////        ResponseEntity<FriendRequest> res2 = restTemplate.exchange(uri, HttpMethod.PUT, httpEntity, FriendRequest.class);
-////        assertEquals(200, res2.getStatusCodeValue());
-////
-////        User userFrom = repo.findById("1").get();
-////        User userTo = repo.findById("2").get();
-////
-////        assertThat(userFrom.getFriends(), hasItems("2"));
-////        assertThat(userTo.getFriends(), hasItems("1"));
-//
-//
-//    }
+//        assertThat(userFrom.getFriends(), hasItems("2"));
+//        assertThat(userTo.getFriends(), hasItems("1"));
+    }
 
     private static CreateTableResult createTable(AmazonDynamoDB ddb, String tableName, String hashKeyName) {
         List<AttributeDefinition> attributeDefinitions = new ArrayList<AttributeDefinition>();

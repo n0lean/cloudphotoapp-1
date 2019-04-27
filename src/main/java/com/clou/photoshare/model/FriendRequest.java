@@ -12,14 +12,14 @@ import java.io.Serializable;
 import java.util.Date;
 
 
-@JsonDeserialize(using = FriendRequestDeserialize.class)
+// @JsonDeserialize(using = FriendRequestDeserialize.class)
 @DynamoDBTable(tableName = "FriendRequest")
 @PropertySource("classpath:application.properties")
 public class FriendRequest {
     private String fromUserId;
     private String toUserId;
     private String status;
-    private Date timeStamp;
+    private String timeStamp;
 
     public class FriendRequestId implements Serializable {
 
@@ -56,7 +56,7 @@ public class FriendRequest {
     public FriendRequest (String fromUserId,
                           String toUserId,
                           String status,
-                          Date timeStamp) {
+                          String timeStamp) {
         this.fromUserId = fromUserId;
         this.toUserId = toUserId;
         this.status = status;
@@ -81,9 +81,9 @@ public class FriendRequest {
     public void setStatus(String status) { this.status = status; }
 
     @DynamoDBAttribute(attributeName = "TimeStamp")
-    public Date getTimeStamp() { return this.timeStamp; }
+    public String getTimeStamp() { return this.timeStamp; }
 
-    public void setTimeStamp(Date timeStamp) { this.timeStamp = timeStamp; }
+    public void setTimeStamp(String timeStamp) { this.timeStamp = timeStamp; }
 
 
     @Override

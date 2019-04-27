@@ -6,11 +6,9 @@ public class FriendRequestBuilder {
     private String _fromUserId;
     private String _toUserId;
     private String _status;
-    private Date _timeStamp;
+    private String _timeStamp;
 
     public FriendRequestBuilder () {
-        this._status = "Pending";
-        this._timeStamp = new Date();
     }
 
     public FriendRequestBuilder fromUserId(String fromUserId) {
@@ -28,7 +26,7 @@ public class FriendRequestBuilder {
         return this;
     }
 
-    public FriendRequestBuilder timeStamp(Date timeStamp) {
+    public FriendRequestBuilder timeStamp(String timeStamp) {
         this._timeStamp = timeStamp;
         return this;
     }

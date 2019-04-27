@@ -86,11 +86,25 @@ public class UserController {
     @RequestMapping(value = "/addfriend", method = RequestMethod.POST)
     public ResponseEntity<?> createFriendRequest(@RequestBody FriendRequest friendRequest) {
 
+
+        System.out.print("=======================================");
+        System.out.println("Request Received");
+
         String fromUserId= friendRequest.getFromUserId();
         String toUserId = friendRequest.getToUserId();
+
+        System.out.println(fromUserId);
+        System.out.println(toUserId);
         // this should not happend since it should prevented by Frontend
-        if (this.userService.checkIfFriends(fromUserId, toUserId)) {
-            return new ResponseEntity<>("Already Friends", HttpStatus.OK);
+
+        try {
+            if (this.userService.checkIfFriends(fromUserId, toUserId)) {
+                System.out.println("no problem");
+                return new ResponseEntity<>("Already Friends", HttpStatus.OK);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.notFound().build();
         }
 
         int requestStatus = this.userService.checkFriendRequestSend(fromUserId, toUserId);

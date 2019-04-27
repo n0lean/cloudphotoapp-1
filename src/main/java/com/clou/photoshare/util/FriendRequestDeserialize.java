@@ -3,7 +3,9 @@ package com.clou.photoshare.util;
 
 import com.clou.photoshare.model.FriendRequest;
 import com.clou.photoshare.model.FriendRequestBuilder;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.core.ObjectCodec;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
@@ -13,12 +15,17 @@ import java.io.IOException;
 
 public class FriendRequestDeserialize extends JsonDeserializer<FriendRequest> {
 
+
     @Override
     public FriendRequest deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
         ObjectCodec oc = jsonParser.getCodec();
+
+        JsonToken jsonToken = jsonParser.getCurrentToken();
+
         JsonNode node = oc.readTree(jsonParser);
         System.out.println("DEBUG: ");
         System.out.println(node.toString());
+
         FriendRequest fr = new FriendRequestBuilder()
                 .fromUserId(node.get("fromUserId").asText())
                 .toUserId(node.get("toUserId").textValue())

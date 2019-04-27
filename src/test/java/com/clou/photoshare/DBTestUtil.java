@@ -12,7 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 
 public class DBTestUtil {
-    public static void createExampleTable(AmazonDynamoDB amazonDynamoDB, DynamoDB dynamoDB, String tableName, Class tableClass) {
+    public static void createExampleTable(AmazonDynamoDB amazonDynamoDB,
+                                          DynamoDB dynamoDB,
+                                          String tableName,
+                                          Class tableClass) {
         try {
             DynamoDBMapperConfig dynamoDBMapperConfig = DynamoDBMapperConfig.DEFAULT;
             DynamoDBMapper dynamoDBMapper = new DynamoDBMapper(amazonDynamoDB, dynamoDBMapperConfig);
@@ -21,6 +24,8 @@ public class DBTestUtil {
                     .generateCreateTableRequest(tableClass);
             request.setProvisionedThroughput(
                     new ProvisionedThroughput(1L, 1L));
+
+            // request.getGlobalSecondaryIndexes().get(0).setProvisionedThroughput(new ProvisionedThroughput(1l, 1l));
 
             System.out.println("Issuing CreateTable request for " + tableName);
             Table table = dynamoDB.createTable(request);
@@ -33,6 +38,33 @@ public class DBTestUtil {
             System.err.println(e.getMessage());
         }
 
+    }
+
+    public static void createExampleTableWithSecondaryIndex(AmazonDynamoDB amazonDynamoDB,
+                                                            DynamoDB dynamoDB,
+                                                            String tableName,
+                                                            Class tableClass) {
+        try {
+            DynamoDBMapperConfig dynamoDBMapperConfig = DynamoDBMapperConfig.DEFAULT;
+            DynamoDBMapper dynamoDBMapper = new DynamoDBMapper(amazonDynamoDB, dynamoDBMapperConfig);
+
+            CreateTableRequest request = dynamoDBMapper
+                    .generateCreateTableRequest(tableClass);
+            request.setProvisionedThroughput(
+                    new ProvisionedThroughput(1L, 1L));
+
+            request.getGlobalSecondaryIndexes().get(0).setProvisionedThroughput(new ProvisionedThroughput(1l, 1l));
+
+            System.out.println("Issuing CreateTable request for " + tableName);
+            Table table = dynamoDB.createTable(request);
+
+            System.out.println("Waiting for " + tableName + " to be created...this may take a while...");
+            table.waitForActive();
+        }
+        catch (Exception e) {
+            System.err.println("CreateTable request failed for " + tableName);
+            System.err.println(e.getMessage());
+        }
     }
 
     public static void deleteExampleTable(DynamoDB dynamoDB, String tableName) {
