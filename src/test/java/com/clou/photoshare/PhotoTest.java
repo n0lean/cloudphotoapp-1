@@ -55,7 +55,7 @@ public class PhotoTest {
     @Before
     public void setUp() throws Exception {
         this.dynamoDB = new DynamoDB(amazonDynamoDB);
-        DBTestUtil.createExampleTable(amazonDynamoDB, dynamoDB, tableName, tableClass);
+        DBTestUtil.createExampleTableWithSecondaryIndex(amazonDynamoDB, dynamoDB, tableName, tableClass);
     }
 
 //    @Test
