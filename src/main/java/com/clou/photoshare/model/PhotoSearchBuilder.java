@@ -1,5 +1,6 @@
 package com.clou.photoshare.model;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public class PhotoSearchBuilder {
@@ -13,7 +14,9 @@ public class PhotoSearchBuilder {
     }
 
     public PhotoSearch builder(){
-        PhotoSearch pS = new PhotoSearch(this._userId, this._tripId);
+        PhotoSearch pS = new PhotoSearch();
+        pS.setUserId(_userId);
+        pS.setTripId(_tripId);
         pS.setPhotoId(this._photosId);
         return pS;
     }
@@ -35,4 +38,14 @@ public class PhotoSearchBuilder {
         this._photosId = _photosId;
         return this;
     }
+
+    public PhotoSearchBuilder add_photosId(String _photosId) {
+        if(this._photosId == null){
+            this._photosId = new HashSet<>();
+        }
+        this._photosId.add(_photosId);
+        return this;
+    }
+
+
 }

@@ -10,14 +10,12 @@ import com.clou.photoshare.repository.PhotosRepository;
 import com.clou.photoshare.services.PhotoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sun.net.ResourceManager;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
 @RequestMapping("/photos")
@@ -67,9 +65,9 @@ public class PhotoController {
     }
 
 
-    @RequestMapping(value = "/findOne/{userId}/{photoId}", method = RequestMethod.GET)
-    public ResponseEntity<?> getPhoto(@PathVariable("userId") String userId,
-                                      @PathVariable("photoId") String photoId) {
+    @RequestMapping(value = "/findOne", method = RequestMethod.GET)
+    public ResponseEntity<?> getPhoto(@RequestParam("userId") String userId,
+                                      @RequestParam("photoId") String photoId) {
         try{
             Photo photo = repository.findById(photoId).orElseThrow(()-> new PhotoNotFoundException(photoId));
             return new ResponseEntity<>(photo, HttpStatus.OK);
@@ -80,9 +78,9 @@ public class PhotoController {
 
 
     //photo/findAll?userId=XXX
-    @RequestMapping(value = "/findAll/{userId}/{tripId}", method = RequestMethod.GET)
-    public ResponseEntity<?> findAll(@PathVariable("userId") String userId,
-                                     @PathVariable("tripId") String tripId){
+    @RequestMapping(value = "/findAll", method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> findAll(@RequestParam("userId") String userId,
+                                     @RequestParam("tripId") String tripId){
         try {
             Set<S3Address> get = photoService.getAllPhotoByQuery(userId,tripId);
             if(get == null || get.isEmpty()){

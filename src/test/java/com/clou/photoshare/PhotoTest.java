@@ -1,25 +1,30 @@
 package com.clou.photoshare;
 
-import org.junit.runner.RunWith;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.document.DynamoDB;
 import com.clou.photoshare.model.*;
+import com.clou.photoshare.repository.PhotoSearchRepository;
 import com.clou.photoshare.repository.PhotosRepository;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import scala.collection.Set;
 
+import java.lang.reflect.Type;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.UUID;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -44,9 +49,14 @@ public class PhotoTest {
     @Autowired
     PhotosRepository repo;
 
+    @Autowired
+    PhotoSearchRepository repoSearch;
+
     private DynamoDB dynamoDB;
     private String tableName = "Photo";
+    private String tableName1 = "PhotoSearch";
     private Class tableClass = Photo.class;
+    private Class tableClass1 = PhotoSearch.class;
 
     private String createURLWithPort(String uri) {
         return "http://localhost:" + port + uri;
@@ -56,32 +66,97 @@ public class PhotoTest {
     public void setUp() throws Exception {
         this.dynamoDB = new DynamoDB(amazonDynamoDB);
         DBTestUtil.createExampleTableWithSecondaryIndex(amazonDynamoDB, dynamoDB, tableName, tableClass);
+        DBTestUtil.createExampleTable(amazonDynamoDB, dynamoDB, tableName1, tableClass1);
     }
 
-//    @Test
-//    public void testGetPhotobyId() throws URISyntaxException {
-//        TestRestTemplate restTemplate = new TestRestTemplate();
-//
-//        UUID uuid = UUID.randomUUID();
-//        String uuid_str = uuid.toString();
-//        String huxin = "huxin";
-//        final String baseurl = createURLWithPort("/photos/findOne/"+huxin+"/"+uuid_str);
-//
-//        URI uri = new URI(baseurl);
-//
-//        Photo testPhoto = new PhotoBuilder()
-//                .photoId(uuid_str)
-//                .photoKey("01010101")
-//                .ownerId(huxin)
-//                .tripId("MYC")
-//                .buildPhoto();
-//
-//        repo.save(testPhoto);
-//        ResponseEntity<Photo> result = restTemplate.getForEntity(uri, Photo.class);
-//        assertEquals(200, result.getStatusCodeValue());
-//        assertEquals(testPhoto.getOwnerId(), result.getBody().getOwnerId());
-//
-//    }
+    @Test
+    public void testGetPhotobyId() throws URISyntaxException {
+        TestRestTemplate restTemplate = new TestRestTemplate();
+
+        UUID uuid = UUID.randomUUID();
+        String uuid_str = uuid.toString();
+        String huxin = "huxin";
+        final String baseurl = createURLWithPort("/photos/findOne?userId=huxin&photoId="+uuid_str);
+
+        URI uri = new URI(baseurl);
+
+        Photo testPhoto = new PhotoBuilder()
+                .photoId(uuid_str)
+                .photoKey("01010101")
+                .ownerId(huxin)
+                .bucketName("hay")
+                .tripId("MYC")
+                .buildPhoto();
+
+        repo.save(testPhoto);
+        ResponseEntity<Photo> result = restTemplate.getForEntity(uri, Photo.class);
+        assertEquals(200, result.getStatusCodeValue());
+        assertEquals(testPhoto.getOwnerId(), result.getBody().getOwnerId());
+
+    }
+
+    @Test
+    public void testFindAllPhoto() throws URISyntaxException{
+        TestRestTemplate restTemplate = new TestRestTemplate();
+
+        UUID uuid = UUID.randomUUID();
+        String uuid_str = uuid.toString();
+        UUID uuid1 = UUID.randomUUID();
+        String uuid_str1 = uuid1.toString();
+
+        final String baseurl = createURLWithPort("/photos/findAll?userId=huxin&tripId=MYC");
+
+        URI uri = new URI(baseurl);
+
+        Photo testPhoto = new PhotoBuilder()
+                .photoId(uuid_str)
+                .photoKey("03030303")
+                .ownerId("huxin")
+                .bucketName("hay")
+                .tripId("MYC")
+                .buildPhoto();
+
+        Photo testPhoto2 = new PhotoBuilder()
+                .photoId(uuid_str1)
+                .photoKey("03030304")
+                .ownerId("huxin")
+                .bucketName("hay")
+                .tripId("MYC")
+                .buildPhoto();
+
+        PhotoSearch testSearch = new PhotoSearchBuilder()
+                .set_tripId("MYC")
+                .set_userId("huxin")
+                .add_photosId(uuid_str)
+                .add_photosId(uuid_str1)
+                .builder();
+
+        S3Address testS31 = new S3Address();
+        testS31.setAddressBucket("hay");
+        testS31.setAddressKey("03030304");
+
+        S3Address testS32 = new S3Address();
+        testS32.setAddressBucket("hay");
+        testS32.setAddressKey("03030303");
+
+        repo.save(testPhoto);
+        repo.save(testPhoto2);
+        repoSearch.save(testSearch);
+        Iterable<PhotoSearch> res = repoSearch.findAll();
+
+
+        Photo photo1 = repo.findById(uuid_str).get();
+        Photo photo2 = repo.findById(uuid_str1).get();
+
+        PhotoSearch res1 = repoSearch.findByUserIdAndTripId("huxin","MYC");
+
+        assertTrue(res1.getPhotoId().contains(uuid_str));
+        assertTrue(res1.getPhotoId().contains(uuid_str1));
+
+        //ResponseEntity<Set<S3Address>> result = restTemplate.exchange(baseurl, HttpMethod.GET, null, new ParameterizedTypeReference<Set<S3Address>>() {}, Collections.emptyMap());
+        //assertEquals(200, result.getStatusCodeValue());
+
+    }
 
     @Test
     public void testAddPhoto() throws URISyntaxException {
@@ -143,6 +218,7 @@ public class PhotoTest {
     @After
     public void tearDown() {
         DBTestUtil.deleteExampleTable(dynamoDB, tableName);
+        DBTestUtil.deleteExampleTable(dynamoDB,tableName1);
     }
 
 }
