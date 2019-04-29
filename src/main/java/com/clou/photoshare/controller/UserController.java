@@ -88,9 +88,6 @@ public class UserController {
     public ResponseEntity<?> createFriendRequest(@RequestBody FriendRequest friendRequest) {
 
 
-        System.out.print("=======================================");
-        System.out.println("Request Received");
-
         String fromUserId= friendRequest.getFromUserId();
         String toUserId = friendRequest.getToUserId();
 
