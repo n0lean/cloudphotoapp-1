@@ -34,9 +34,11 @@ public class PhotoService {
         try {
             String photoId = photo.getId();
             String tripId = photo.getTripId();
-            Set<String> photolist = photoSearchRepository.findByUserIdAndTripId(newViewerId, tripId).getPhotoId();
-            if (photolist.isEmpty() || photolist == null) {
+            Set<String> photolist;
+            if(photoSearchRepository.findByUserIdAndTripId(newViewerId, tripId) == null){
                 photolist = new HashSet<>();
+            }else {
+                photolist = photoSearchRepository.findByUserIdAndTripId(newViewerId, tripId).getPhotoId();
             }
             photolist.add(photoId);
             PhotoSearch photoSearch = new PhotoSearchBuilder()
@@ -48,8 +50,6 @@ public class PhotoService {
         }catch (Exception e){
             System.out.println(e);
         }
-
-
     }
 
 
