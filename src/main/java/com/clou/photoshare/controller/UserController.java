@@ -7,6 +7,7 @@ import com.clou.photoshare.repository.FriendRequestRepository;
 import com.clou.photoshare.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -87,14 +88,9 @@ public class UserController {
     public ResponseEntity<?> createFriendRequest(@RequestBody FriendRequest friendRequest) {
 
 
-        System.out.print("=======================================");
-        System.out.println("Request Received");
-
         String fromUserId= friendRequest.getFromUserId();
         String toUserId = friendRequest.getToUserId();
 
-        System.out.println(fromUserId);
-        System.out.println(toUserId);
         // this should not happend since it should prevented by Frontend
 
         try {
@@ -123,10 +119,6 @@ public class UserController {
     public ResponseEntity<?> respondFriendRequest(@RequestBody FriendRequest friendRequest) {
         try {
             String status = friendRequest.getStatus();
-
-            System.out.println("===========================");
-            System.out.println(status);
-            System.out.println("============================");
             if (status.equals("accepted")) {
                 this.userService.acceptFriendRequest(friendRequest);
             } else {
@@ -157,4 +149,15 @@ public class UserController {
             return ResponseEntity.badRequest().build();
         }
     }
+
+    // ======= trip =======
+//    @RequestMapping(value = "/gettrips/{id}", method = RequestMethod.GET)
+//    public ResponseEntity<?> getTrips(@PathVariable String userId) {
+//        try {
+//            List<String> result = this.userService.getTripsByUserId(userId);
+//            return new ResponseEntity<>(result, HttpStatus.OK);
+//        } catch (Exception e) {
+//            return ResponseEntity.badRequest().build();
+//        }
+//    }
 }

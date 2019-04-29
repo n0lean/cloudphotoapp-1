@@ -1,7 +1,7 @@
 package com.clou.photoshare;
 
-import java.util.ArrayList;
-import java.util.UUID;
+import java.util.*;
+
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
@@ -34,9 +34,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
-import java.util.Iterator;
-
-import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -94,11 +91,15 @@ public class UserDBTest {
         assertFalse(repo.existsById(uuid_str));
     }
 
+
     @Test
     public void findByIdTest() {
 
         UUID uuid = UUID.randomUUID();
         String uuid_str = uuid.toString();
+        Map<String, String> testTrips = new HashMap<>();
+        testTrips.put("1", "1");
+
         User testUser = new UserBuilder()
                 .email("test@me.com")
                 .id(uuid_str)
@@ -106,13 +107,15 @@ public class UserDBTest {
                 .firstName("c")
                 .profilePhotoId("123123")
                 .lastName("a")
+                .trips(testTrips)
                 .profilePhotoAddress(new S3Address("123", "123"))
                 .buildUser();
         repo.save(testUser);
 
         User result = repo.findById(uuid_str).get();
         assertEquals(testUser, result);
-
+//        System.out.println("=====================");
+//        System.out.println(result.toString());
         repo.delete(testUser);
         assertFalse(repo.existsById(uuid_str));
     }
