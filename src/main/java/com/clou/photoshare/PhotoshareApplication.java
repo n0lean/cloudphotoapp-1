@@ -6,7 +6,6 @@ import org.springframework.scheduling.annotation.EnableAsync;
 
 
 @SpringBootApplication
-@EnableAsync
 //@ComponentScan("com.clou.photoshare")
 //@ComponentScan({"com.clou.photoshare.controller", "com.clou.photoshare.model", "com.clou.photoshare.repository",
 //                "com.clou.photoshare.service"})

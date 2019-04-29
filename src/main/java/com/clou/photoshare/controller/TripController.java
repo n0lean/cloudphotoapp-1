@@ -33,7 +33,7 @@ public class TripController {
             repository.save(new_trip);
             return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.toString());
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
@@ -48,7 +48,7 @@ public class TripController {
                 return ResponseEntity.notFound().build();
             }
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.toString());
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
@@ -63,9 +63,12 @@ public class TripController {
                 return ResponseEntity.notFound().build();
             }
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.toString());
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-    
 
+//    @RequestMapping(value = "/addMember", method = RequestMethod.GET)
+//    public ResponseEntity<?> addMember(@RequestParam memberId) {
+//
+//    }
 }
