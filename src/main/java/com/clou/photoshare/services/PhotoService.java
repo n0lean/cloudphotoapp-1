@@ -8,7 +8,6 @@ import com.clou.photoshare.repository.PhotosRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -36,8 +35,8 @@ public class PhotoService {
             String photoId = photo.getId();
             String tripId = photo.getTripId();
             Set<String> photolist = photoSearchRepository.findByUserIdAndTripId(newViewerId, tripId).getPhotoId();
-            if (photolist.isEmpty()) {
-                return;
+            if (photolist.isEmpty() || photolist == null) {
+                photolist = new HashSet<>();
             }
             photolist.add(photoId);
             PhotoSearch photoSearch = new PhotoSearchBuilder()
@@ -50,6 +49,21 @@ public class PhotoService {
             System.out.println(e);
         }
 
+
+    }
+
+
+    public void storeNewPhotoSearch(PhotoSearch ps){
+        try {
+            PhotoSearch newSearchItem = new PhotoSearchBuilder()
+                    .set_photosId(ps.getPhotoId())
+                    .set_tripId(ps.getTripId())
+                    .set_userId(ps.getUserId())
+                    .builder();
+            photoSearchRepository.save(newSearchItem);
+        }catch (Exception e){
+            System.out.println(e);
+        }
 
     }
 

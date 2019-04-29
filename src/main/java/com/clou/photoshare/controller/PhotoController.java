@@ -1,11 +1,9 @@
 package com.clou.photoshare.controller;
 import com.clou.photoshare.errorHandler.InvalidArgumentException;
-import com.clou.photoshare.model.S3Address;
+import com.clou.photoshare.model.*;
 import com.clou.photoshare.services.PhotoDistributionService;
 import com.clou.photoshare.errorHandler.PhotoIsNullException;
 import com.clou.photoshare.errorHandler.PhotoNotFoundException;
-import com.clou.photoshare.model.Photo;
-import com.clou.photoshare.model.PhotoBuilder;
 import com.clou.photoshare.repository.PhotosRepository;
 import com.clou.photoshare.services.PhotoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,6 +56,40 @@ public class PhotoController {
             //photoDsService.assignViewer(photo);
 
             return new ResponseEntity<>(newPhoto, HttpStatus.CREATED);
+        }catch (InvalidArgumentException e){
+            // ! DO not  return exception, IF MUST DO Escape character first!!!!
+            return ResponseEntity.badRequest().body("Bad argument.");
+        }
+    }
+
+    @RequestMapping(value = "/newPhotos", method = RequestMethod.POST)
+    public ResponseEntity<?> addPhotos(@RequestBody PhotoStream photos){
+        if(photos.getPhotos().size() == 0){
+            throw new PhotoIsNullException(null);
+        }
+        try {
+            for(Photo photo: photos.getPhotos()) {
+                if (!checkIsNull(photo)) {
+                    throw new PhotoIsNullException(photo);
+                }
+            }
+
+            repository.saveAll(photos.getPhotos());
+            //photoDsService.assignViewer(photo);
+
+            return new ResponseEntity<>(photos, HttpStatus.CREATED);
+
+        }catch (InvalidArgumentException e){
+            // ! DO not  return exception, IF MUST DO Escape character first!!!!
+            return ResponseEntity.badRequest().body("Bad argument.");
+        }
+    }
+
+    @RequestMapping(value = "/testPhotoSearch", method = RequestMethod.POST)
+    public ResponseEntity<?> testAddPhotoSearch(@RequestBody PhotoSearch photoSearch){
+        try {
+            photoService.storeNewPhotoSearch(photoSearch);
+            return new ResponseEntity<>(null, HttpStatus.CREATED);
         }catch (InvalidArgumentException e){
             // ! DO not  return exception, IF MUST DO Escape character first!!!!
             return ResponseEntity.badRequest().body("Bad argument.");

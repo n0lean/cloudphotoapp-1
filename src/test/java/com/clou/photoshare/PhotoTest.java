@@ -5,6 +5,7 @@ import com.amazonaws.services.dynamodbv2.document.DynamoDB;
 import com.clou.photoshare.model.*;
 import com.clou.photoshare.repository.PhotoSearchRepository;
 import com.clou.photoshare.repository.PhotosRepository;
+import com.clou.photoshare.services.PhotoService;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.ClassRule;
@@ -19,9 +20,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import scala.collection.Set;
 
-import java.lang.reflect.Type;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.*;
@@ -51,6 +50,9 @@ public class PhotoTest {
 
     @Autowired
     PhotoSearchRepository repoSearch;
+
+    @Autowired
+    PhotoService ps;
 
     private DynamoDB dynamoDB;
     private String tableName = "Photo";
@@ -92,7 +94,104 @@ public class PhotoTest {
         ResponseEntity<Photo> result = restTemplate.getForEntity(uri, Photo.class);
         assertEquals(200, result.getStatusCodeValue());
         assertEquals(testPhoto.getOwnerId(), result.getBody().getOwnerId());
+    }
 
+    @Test
+    public void testPhotoService() {
+
+
+        UUID uuid = UUID.randomUUID();
+        String uuid_str = uuid.toString();
+        UUID uuid1 = UUID.randomUUID();
+        String uuid_str1 = uuid1.toString();
+
+        Photo testPhoto = new PhotoBuilder()
+                .photoId(uuid_str)
+                .photoKey("03030303")
+                .ownerId("huxin")
+                .bucketName("hay")
+                .tripId("MYC")
+                .buildPhoto();
+
+        Photo testPhoto2 = new PhotoBuilder()
+                .photoId(uuid_str1)
+                .photoKey("03030304")
+                .ownerId("huxin")
+                .bucketName("hay")
+                .tripId("MYC")
+                .buildPhoto();
+
+        PhotoSearch testSearch = new PhotoSearchBuilder()
+                .set_tripId("MYC")
+                .set_userId("huxin")
+                .add_photosId(uuid_str)
+                .add_photosId(uuid_str1)
+                .builder();
+
+        S3Address testS31 = new S3Address();
+        testS31.setAddressBucket("hay");
+        testS31.setAddressKey("03030304");
+
+        S3Address testS32 = new S3Address();
+        testS32.setAddressBucket("hay");
+        testS32.setAddressKey("03030303");
+
+        Set<S3Address> compareS3 = new HashSet<>();
+        compareS3.add(testS31);
+        compareS3.add(testS32);
+        repo.save(testPhoto);
+        repo.save(testPhoto2);
+        repoSearch.save(testSearch);
+        //find by useId and tripID
+        Set<S3Address> res = ps.getAllPhotoByQuery("huxin", "MYC");
+
+    }
+
+    @Test
+    public void testAddAll() throws URISyntaxException{
+        TestRestTemplate restTemplate = new TestRestTemplate();
+
+        UUID uuid = UUID.randomUUID();
+        String uuid_str = uuid.toString();
+        UUID uuid1 = UUID.randomUUID();
+        String uuid_str1 = uuid1.toString();
+        final String baseurl = createURLWithPort("/photos/newPhotos");
+
+        URI uri = new URI(baseurl);
+
+        PhotoStream ps = new PhotoStream();
+
+        Photo testPhoto = new PhotoBuilder()
+                .photoId(uuid_str1)
+                .photoKey("03030304")
+                .ownerId("oliver")
+                .bucketName("hay")
+                .tripId("MYC")
+                .buildPhoto();
+
+        Photo testPhoto1 = new PhotoBuilder()
+                .photoId(uuid_str)
+                .photoKey("03030303")
+                .ownerId("oliver")
+                .bucketName("hay")
+                .tripId("MYC")
+                .buildPhoto();
+
+        List<Photo> ppStream = new ArrayList<>();
+        ppStream.add(testPhoto);
+        ppStream.add(testPhoto1);
+
+        ps.setPhotos(ppStream);
+
+
+        ResponseEntity<PhotoStream> result = restTemplate.postForEntity(uri, ps, PhotoStream.class);
+        Photo getPhoto = repo.findById(uuid_str1).get();
+        Photo getPhoto1 = repo.findById(uuid_str).get();
+
+        assertEquals(201, result.getStatusCodeValue());
+        //assertEquals(testPhoto.getOwnerId(), result.getBody().getOwnerId());
+        //assertEquals(getPhoto.getPhotoAddress().getAddressKey(),result.getBody().getPhotoAddress().getAddressKey());
+        //assertEquals(getPhoto.getPhotoAddress().getAddressBucket(),result.getBody().getPhotoAddress().getAddressBucket());
     }
 
     @Test
@@ -153,7 +252,7 @@ public class PhotoTest {
         assertTrue(res1.getPhotoId().contains(uuid_str));
         assertTrue(res1.getPhotoId().contains(uuid_str1));
 
-        //ResponseEntity<Set<S3Address>> result = restTemplate.exchange(baseurl, HttpMethod.GET, null, new ParameterizedTypeReference<Set<S3Address>>() {}, Collections.emptyMap());
+        ResponseEntity<Set<S3Address>> result = restTemplate.exchange(baseurl, HttpMethod.GET, null, new ParameterizedTypeReference<Set<S3Address>>() {});
         //assertEquals(200, result.getStatusCodeValue());
 
     }
@@ -180,8 +279,8 @@ public class PhotoTest {
         Photo getPhoto = repo.findById(uuid_str).get();
         assertEquals(201, result.getStatusCodeValue());
         assertEquals(testPhoto.getOwnerId(), result.getBody().getOwnerId());
-        assertEquals(getPhoto.getPhotoKey(),result.getBody().getPhotoKey());
-        assertEquals(getPhoto.getBucketName(),result.getBody().getBucketName());
+        assertEquals(getPhoto.getPhotoAddress().getAddressKey(),result.getBody().getPhotoAddress().getAddressKey());
+        assertEquals(getPhoto.getPhotoAddress().getAddressBucket(),result.getBody().getPhotoAddress().getAddressBucket());
 
     }
 
