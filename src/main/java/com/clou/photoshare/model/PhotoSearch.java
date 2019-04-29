@@ -16,13 +16,13 @@ public class PhotoSearch {
     @Id
     private PhotoSearchId photoSearchId;
 
-    private Set<String> photosId;
+    private Set<String> photoId;
 
     public PhotoSearch(){
     }
 
     public PhotoSearch(String userId, String tripId){
-        this.photosId = new HashSet<>();
+        this.photoId = new HashSet<>();
         this.photoSearchId = new PhotoSearchId();
         this.photoSearchId.setTripId(tripId);
         this.photoSearchId.setUserId(userId);
@@ -43,7 +43,6 @@ public class PhotoSearch {
     }
 
     @DynamoDBRangeKey(attributeName = "TripId")
-    @DynamoDBIndexHashKey(attributeName = "TripId",globalSecondaryIndexName="TripId_index")
     public String getTripId() {
 
         return photoSearchId != null ? photoSearchId.getTripId():null;
@@ -59,19 +58,29 @@ public class PhotoSearch {
 
     @DynamoDBAttribute(attributeName = "PhotoId")
     public Set<String> getPhotoId() {
-        return photosId;
+        return photoId;
     }
 
-    public void setPhotoId(Collection<String> photoId) {
-        if(this.photosId == null){
-            this.photosId = new HashSet<String>();
+    public void addPhotoId(Collection<String> photoId) {
+        if(this.photoId == null){
+            this.photoId = new HashSet<>();
         }
-        this.photosId.addAll(photoId);
+        this.photoId.addAll(photoId);
     }
 
-    public void setPhotoId(String photoId){
-        this.photosId.add(photoId);
+    public void addPhotoId(String photoId){
+        if(this.photoId == null){
+            this.photoId = new HashSet<>();
+        }
+        this.photoId.add(photoId);
     }
+
+    public void setPhotoId(Set<String> photoId){
+
+        this.photoId = photoId;
+    }
+
+
 
     @Override
     public boolean equals(Object obj) {

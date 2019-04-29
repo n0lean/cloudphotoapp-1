@@ -21,5 +21,7 @@ public interface PhotoSearchRepository extends CrudRepository<PhotoSearch, Photo
     PhotoSearch findByUserIdAndTripId(String userId,  String tripId);
     PhotoSearch findByPhotoSearchId(PhotoSearchId Id);
     List<PhotoSearch> findByTripId(String tripId);
+    List<PhotoSearch> findByUserId(String userId);
+
 
 }
