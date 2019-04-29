@@ -130,14 +130,31 @@ public class UserService {
         return this.friendRequestRepository.findFriendRequestByToUserId(userId);
     }
 
-
     /**
-     * Get User entity by userId
+     * Get user by user id
      * @param userId
      * @return
      * @throws UserNotFoundException
      */
     public User getUserById(String userId) throws UserNotFoundException {
-        return this.userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
+        User user = this.userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
+        return user;
+    }
+
+    /**
+     * Update user to have a new trip
+     * @param tripId
+     * @param tripName
+     * @param userId
+     */
+    public void addTripToUserByUserId(String tripId, String tripName, String userId) throws UserNotFoundException {
+        User user = this.userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
+        if (user.getTrips().containsKey(tripId) && user.getTrips().get(tripId).equals(tripName)) {
+            return;
+        } else {
+            user.getTrips().put(tripId, tripName);
+        }
+
+        this.userRepository.save(user);
     }
 }

@@ -3,8 +3,7 @@ package com.clou.photoshare.model;
 
 import com.clou.photoshare.errorHandler.InvalidArgumentException;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class UserBuilder {
     private String _id;
@@ -15,6 +14,7 @@ public class UserBuilder {
     private S3Address _address;
     private Set<String> _friends;
     private String _profilePhotoId;
+    private Map<String, String> _trips;
 
     public UserBuilder() {  }
 
@@ -26,8 +26,20 @@ public class UserBuilder {
         }
         if (this._friends == null) this._friends = new HashSet<>();
         this._friends.add(this._id);
-        return new User(this._id, this._nickName, this._firstName, this._lastName,
-                this._email, this._address, this._friends, this._profilePhotoId);
+
+        if (this._trips == null) {
+            this._trips = new HashMap<>();
+        }
+
+        return new User(this._id,
+                        this._nickName,
+                        this._firstName,
+                        this._lastName,
+                        this._email,
+                        this._address,
+                        this._friends,
+                        this._profilePhotoId,
+                        this._trips);
     }
 
     public UserBuilder profilePhotoId(String _profilePhotoId) {
@@ -62,6 +74,11 @@ public class UserBuilder {
 
     public UserBuilder profilePhotoAddress(S3Address _address) {
         this._address = _address;
+        return this;
+    }
+
+    public UserBuilder trips(Map<String, String> trips) {
+        this._trips = trips;
         return this;
     }
 

@@ -4,14 +4,12 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConverted;
+import oracle.jrockit.jfr.StringConstantPool;
 
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Email;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @DynamoDBTable(tableName = "User")
 public class User {
@@ -36,12 +34,21 @@ public class User {
     @NotNull
     private String profilePhotoId;
 
+    private Map<String, String> trips;
+
     // have a empty consturctor so we can constrcut object from DB
     public User () {}
 
-    public User(String id, String nickName, String firstName, String lastName,
-                String email, S3Address profilePhotoAddress, Set<String> friends,
-                String profilePhotoId) {
+    public User(String id,
+                String nickName,
+                String firstName,
+                String lastName,
+                String email,
+                S3Address profilePhotoAddress,
+                Set<String> friends,
+                String profilePhotoId,
+                Map<String, String> trips) {
+
         this.id = id;
         this.nickName = nickName;
         this.firstName = firstName;
@@ -51,6 +58,7 @@ public class User {
         this.friends.add(this.id);
         this.profilePhotoAddress = profilePhotoAddress;
         this.profilePhotoId = profilePhotoId;
+        this.trips = trips;
     }
 
     @DynamoDBHashKey(attributeName = "Id")
@@ -115,6 +123,15 @@ public class User {
         this.profilePhotoId = profilePhotoId;
     }
 
+
+    @DynamoDBAttribute(attributeName = "Trips")
+    public Map<String, String> getTrips() {
+        return this.trips;
+    }
+
+    public void setTrips(Map<String, String> trips) {
+        this.trips = trips;
+    }
 //    @DynamoDBAttribute(attributeName = "AddressKey")
 //    public String getAddressKey() {
 //        return this.profilePhotoAddress.getAddressKey();
@@ -131,8 +148,8 @@ public class User {
 
     @Override
     public String toString() {
-        return String.format("User: id: %s, nickname: %s, firstname: %s, lastname: %s, email: %s",
-                this.id, this.nickName, this.firstName, this.lastName, this.email);
+        return String.format("User: id: %s, nickname: %s, firstname: %s, lastname: %s, email: %s, trips: %s" ,
+                this.id, this.nickName, this.firstName, this.lastName, this.email, this.trips.toString());
     }
 
     @Override

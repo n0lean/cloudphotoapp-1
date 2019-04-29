@@ -17,6 +17,7 @@ import com.clou.photoshare.controller.UserController;
 import com.clou.photoshare.errorHandler.InvalidArgumentException;
 import com.clou.photoshare.model.*;
 import com.clou.photoshare.repository.UserRepository;
+import org.assertj.core.util.VisibleForTesting;
 import org.junit.*;
 
 import static org.hamcrest.core.IsCollectionContaining.hasItems;
