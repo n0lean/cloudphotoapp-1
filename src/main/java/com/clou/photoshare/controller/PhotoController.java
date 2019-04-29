@@ -78,7 +78,7 @@ public class PhotoController {
 
 
     //photo/findAll?userId=XXX
-    @RequestMapping(value = "/findAll", method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/findAll", method = RequestMethod.GET)
     public ResponseEntity<?> findAll(@RequestParam("userId") String userId,
                                      @RequestParam("tripId") String tripId){
         try {
