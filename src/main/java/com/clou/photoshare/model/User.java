@@ -4,8 +4,6 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConverted;
-import oracle.jrockit.jfr.StringConstantPool;
-
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Email;
