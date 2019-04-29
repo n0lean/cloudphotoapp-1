@@ -91,8 +91,6 @@ public class UserController {
         String fromUserId= friendRequest.getFromUserId();
         String toUserId = friendRequest.getToUserId();
 
-        System.out.println(fromUserId);
-        System.out.println(toUserId);
         // this should not happend since it should prevented by Frontend
 
         try {
