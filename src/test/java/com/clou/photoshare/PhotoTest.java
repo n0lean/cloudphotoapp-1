@@ -148,6 +148,63 @@ public class PhotoTest {
     }
 
     @Test
+    public void testAssignViewId() {
+        UUID uuid = UUID.randomUUID();
+        String uuid_str = uuid.toString();
+        UUID uuid1 = UUID.randomUUID();
+        String uuid_str1 = uuid1.toString();
+        UUID uuid3 = UUID.randomUUID();
+        String uuid_str3 = uuid3.toString();
+
+        Photo testPhoto1 = new PhotoBuilder()
+                .photoId(uuid_str)
+                .photoKey("03030303")
+                .ownerId("huxin")
+                .bucketName("hay")
+                .tripId("MYC")
+                .buildPhoto();
+
+        Photo testPhoto2 = new PhotoBuilder()
+                .photoId(uuid_str1)
+                .photoKey("03030304")
+                .ownerId("huxin")
+                .bucketName("hay")
+                .tripId("MYC")
+                .buildPhoto();
+
+        Photo testPhoto3 = new PhotoBuilder()
+                .photoId(uuid_str3)
+                .photoKey("03030303")
+                .ownerId("huxin")
+                .bucketName("hay")
+                .tripId("MYC")
+                .buildPhoto();
+
+        PhotoSearch testSearch = new PhotoSearchBuilder()
+                .set_tripId("MYC")
+                .set_userId("huxin")
+                .add_photosId(uuid_str)
+                .add_photosId(uuid_str1)
+                .builder();
+
+        repo.save(testPhoto1);
+        repo.save(testPhoto2);
+        repoSearch.save(testSearch);
+        ps.assignViewerOnPhotoById(testPhoto3,"xxx");
+        PhotoSearch res = repoSearch.findByUserIdAndTripId("xxx",testPhoto3.getTripId());
+        assertTrue(res.getPhotoId().contains(uuid_str3));
+        assertEquals(res.getPhotoId().size(),1);
+        ps.assignViewerOnPhotoById(testPhoto3,"huxin");
+        PhotoSearch res1 = repoSearch.findByUserIdAndTripId("huxin",testPhoto3.getTripId());
+        assertTrue(res1.getPhotoId().contains(uuid_str3));
+        assertTrue(res1.getPhotoId().contains(uuid_str));
+        assertTrue(res1.getPhotoId().contains(uuid_str1));
+        assertEquals(res1.getPhotoId().size(),3);
+
+
+    }
+
+    @Test
     public void testAddAll() throws URISyntaxException{
         TestRestTemplate restTemplate = new TestRestTemplate();
 
@@ -253,7 +310,7 @@ public class PhotoTest {
         assertTrue(res1.getPhotoId().contains(uuid_str1));
 
         ResponseEntity<Set<S3Address>> result = restTemplate.exchange(baseurl, HttpMethod.GET, null, new ParameterizedTypeReference<Set<S3Address>>() {});
-        //assertEquals(200, result.getStatusCodeValue());
+        assertEquals(200, result.getStatusCodeValue());
 
     }
 
@@ -281,7 +338,6 @@ public class PhotoTest {
         assertEquals(testPhoto.getOwnerId(), result.getBody().getOwnerId());
         assertEquals(getPhoto.getPhotoAddress().getAddressKey(),result.getBody().getPhotoAddress().getAddressKey());
         assertEquals(getPhoto.getPhotoAddress().getAddressBucket(),result.getBody().getPhotoAddress().getAddressBucket());
-
     }
 
 
