@@ -63,4 +63,10 @@ public class TripService {
         }
         return userList;
     }
+
+    public void addUserToTrip(String tripId, String memberId) {
+        Trip trip = tripRepository.findById(tripId).orElseThrow(()-> new TripNotFoundException(tripId));
+        trip.addTripMember(memberId);
+    }
+
 }
