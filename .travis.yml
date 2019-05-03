@@ -23,6 +23,7 @@ before_install:
 branches:
   only:
   - master
+  - deploy
 
 script:
  - mvn test -B
